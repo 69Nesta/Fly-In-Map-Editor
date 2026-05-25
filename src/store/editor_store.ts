@@ -7,7 +7,7 @@ type Tool =
 	| 'node'
 	| 'connection'
 
-type EditorStore = {
+export type EditorStore = {
 	projectModalOpen: boolean;
 	setProjectModalOpen: (open: boolean) => void;
 
@@ -19,7 +19,7 @@ type EditorStore = {
 };
 
 export const useEditorStore = create<EditorStore>((set) => ({
-	projectModalOpen: true,
+	projectModalOpen: false,
 	setProjectModalOpen: (open) =>
 		set({
 			projectModalOpen: open,

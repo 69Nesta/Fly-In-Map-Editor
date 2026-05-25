@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 import { EZoneType, Node } from '@/context/node';
 import { Connection } from '@/context/connection';
-import type { MapData } from '@/context/map_loader';
+import { type MapData } from '@/context/map_loader';
 
 
-type NetworkStore = {
+export type NetworkStore = {
 	nb_drones: number;
 	setNbDrones: (nb_drones: number) => void;
 
@@ -16,6 +16,8 @@ type NetworkStore = {
 	changeNodeName: (node: Node, name: string) => void;
 	changeMaxDrones: (node: Node, max_drones: number) => void;
 	changeZoneType: (node: Node, zone_type: EZoneType) => void;
+	changeIsStart: (node: Node, is_start: boolean) => void;
+	changeIsEnd: (node: Node, is_end: boolean) => void;
 
 	connections: Connection[];
 	addConnection: (connection: Connection) => void;
@@ -49,45 +51,69 @@ export const useNetworkStore = create<NetworkStore>((set) => ({
 	moveNode: (node, x, y) =>
 		set((state) => ({
 			nodes: state.nodes.map((n) => {
-				if (n === node) {
+				if (n === node)
 					n.setPosition(x, y);
-				}
+
 				return n;
 			}),
 		})),
 	changeNodeColor: (node, color) =>
 		set((state) => ({
 			nodes: state.nodes.map((n) => {
-				if (n === node) {
+				if (n === node)
 					n.setColor(color);
-				}
+
 				return n;
 			}),
 		})),
 	changeNodeName: (node, name) =>
 		set((state) => ({
 			nodes: state.nodes.map((n) => {
-				if (n === node) {
+				if (n === node)
 					n.name = name;
-				}
+
 				return n;
 			}),
 		})),
 	changeMaxDrones: (node, max_drones) =>
 		set((state) => ({
 			nodes: state.nodes.map((n) => {
-				if (n === node) {
+				if (n === node)
 					n.setMaxDrones(max_drones);
-				}
+
 				return n;
 			}),
 		})),
 	changeZoneType: (node, zone_type) =>
 		set((state) => ({
 			nodes: state.nodes.map((n) => {
-				if (n === node) {
+				if (n === node)
 					n.setZoneType(zone_type);
+
+				return n;
+			}),
+		})),
+	changeIsStart: (node, is_start) =>
+		set((state) => ({
+			nodes: state.nodes.map((n) => {
+				if (n === node)
+				{
+					n.setStart(is_start);
+					n.setEnd(false);
 				}
+
+				return n;
+			}),
+		})),
+	changeIsEnd: (node, is_end) =>
+		set((state) => ({
+			nodes: state.nodes.map((n) => {
+				if (n === node)
+				{
+					n.setEnd(is_end);
+					n.setStart(false);
+				}
+
 				return n;
 			}),
 		})),

@@ -67,7 +67,7 @@ const Node = ({ node }: NodeProps) => {
 			<Text
 				ref={textRef}
 				key={`${node.name}-text`}
-				x={node.x - 1} y={node.y + 0.25}
+				x={node.x - 1} y={node.y + 0.27}
 				width={2}
 				text={node.name}
 				fontSize={0.15}

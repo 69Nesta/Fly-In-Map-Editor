@@ -1,6 +1,10 @@
-import { useRef, type RefObject, useEffect } from 'react'
+import { handleUnselectElement } from './hook/handle_unselect_element';
 import { MemoBackgroundLayer } from './layers/background_layer';
 import { ConnectionsLayer } from './layers/connections_layer';
+import { useRef, type RefObject, useEffect } from 'react'
+import { useNetworkStore } from '@/store/network_store';
+import { handleNewNode } from './hook/handle_new_node';
+import { useEditorStore } from '@/store/editor_store';
 import { NodesLayer } from './layers/nodes_layers';
 import { Stage } from 'react-konva'
 import Konva from 'konva'
@@ -13,6 +17,9 @@ export function EditorCanvas() {
 		height: window.innerHeight
 	});
 	const scaleBy: number = 1.05;
+	const currentTool = useEditorStore((s) => s.currentTool);
+	const networkStore = useNetworkStore();
+	const editorStore = useEditorStore();
 
     useEffect(() => {
 		const handleResize = () => {
@@ -57,6 +64,16 @@ export function EditorCanvas() {
 		});
 	};
 
+	const handleClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
+		e.evt.preventDefault();
+		if (e.target !== stageRef.current) return;
+		
+		if (currentTool === 'node')
+			handleNewNode(networkStore, e);
+
+		handleUnselectElement(editorStore);
+	}
+
 	return (
 		<Stage
 			ref={stageRef}
@@ -67,6 +84,7 @@ export function EditorCanvas() {
 			offsetX={-7} offsetY={-5}
 			draggable
 			onWheel={handleWheel}
+			onClick={handleClick}
 		>
 			<MemoBackgroundLayer />
 

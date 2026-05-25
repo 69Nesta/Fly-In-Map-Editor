@@ -16,8 +16,8 @@ enum ENodeColor {
     DARKRED = 'darkred',
     VIOLET = 'violet',
     CRIMSON = 'crimson',
-    RAINBOW = 'rainbow'
-
+    RAINBOW = 'rainbow',
+    WHITE = 'white'
 }
 
 

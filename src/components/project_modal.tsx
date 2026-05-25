@@ -27,7 +27,7 @@ import { useNetworkStore } from '@/store/network_store';
 
 export function ProjectModal() {
 	const [importState, setImportState] = useState<boolean>(false);
-	const importRef: RefObject<HTMLTextAreaElement> = useRef<HTMLTextAreaElement>(null);
+	const importRef: RefObject<HTMLTextAreaElement | null> = useRef<HTMLTextAreaElement | null>(null);
 	const projectModalOpen = useEditorStore((s) => s.projectModalOpen);
 	const setProjectModalOpen = useEditorStore((s) => s.setProjectModalOpen);
 	const network = useNetworkStore();
