@@ -49,6 +49,11 @@ class Connection {
 		return null;
 	}
 
+	equals(other: Connection): boolean {
+		return (this.node1 === other.node1 && this.node2 === other.node2) ||
+			   (this.node1 === other.node2 && this.node2 === other.node1);
+	}
+
 	export(): string {
 		const metadata_str = this.metadata.export();
 

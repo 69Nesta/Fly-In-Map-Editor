@@ -24,6 +24,9 @@ class MapData {
 	nodes: Node[];
 	connections: Connection[];
 
+	start_hub: Node;
+	end_hub: Node;
+
 	warnings: {line: string, line_number: number, message: string}[];
 	errors: {line: string, line_number: number, message: string}[];
 
@@ -45,12 +48,13 @@ class MapData {
 
 class MapLoader {
 	data: MapData;
-	
+
 	constructor(lines: string[]) {
 		this.data = new MapData();
 
 		const cleaned_lines = this.remove_comments(lines);
 		this.parse(cleaned_lines);
+		this.check_validity();
 	}
 
 	remove_comments(lines: string[]): {line: string, line_number: number}[] {
@@ -90,16 +94,80 @@ class MapLoader {
 			} else if (RE_NODE.test(line)) {
 				const node = Node.parse(line, line_number, this.data);
 				if (node)
-					this.data.nodes.push(node);
+					if (this.data.nodes.some(n => n.name === node.name)) {
+						this.data.errors.push({
+							line,
+							line_number,
+							message: `Duplicate node name "${node.name}". Node names must be unique.`
+						});
+					}
+					else if (node.is_start && this.data.nodes.some(n => n.x === node.x && n.y === node.y)) {
+						this.data.errors.push({
+							line,
+							line_number,
+							message: `Multiple nodes at position (${node.x}, ${node.y}).`
+						});
+					}
+					else
+						this.data.nodes.push(node);
 
 			} else if (RE_CONNECTION.test(line)) {
 				const connection = Connection.parse(line, line_number, this.data);
 				if (connection)
-					this.data.connections.push(connection);
+					if (this.data.connections.some(n => n.equals(connection))) {
+						this.data.errors.push({
+							line,
+							line_number,
+							message: `Duplicate connection between "${connection.node1.name}" and "${connection.node2.name}".`
+						});
+					}
+					else
+						this.data.connections.push(connection);
 
 			} else {
 				this.data.warnings.push({line, line_number, message: 'Unrecognized line'});
 			}
+		}
+	}
+
+	check_validity(): void {
+		const start_hubs = this.data.nodes.filter(n => n.is_start);
+		const end_hubs = this.data.nodes.filter(n => n.is_end);
+
+		if (start_hubs.length === 0) {
+			this.data.errors.push({
+				line: '',
+				line_number: 0,
+				message: 'No start hub defined.'
+			});
+		}
+		else if (start_hubs.length > 1) {
+			this.data.errors.push({
+				line: '',
+				line_number: 0,
+				message: 'Multiple start hubs defined.'
+			});
+		}
+		else {
+			this.data.start_hub = start_hubs[0];
+		}
+
+		if (end_hubs.length === 0) {
+			this.data.errors.push({
+				line: '',
+				line_number: 0,
+				message: 'No end hub defined.'
+			});
+		}
+		else if (end_hubs.length > 1) {
+			this.data.errors.push({
+				line: '',
+				line_number: 0,
+				message: 'Multiple end hubs defined.'
+			});
+		}
+		else {
+			this.data.end_hub = end_hubs[0];
 		}
 	}
 }

@@ -8,7 +8,7 @@ class NodeMetadata {
 	color: string;
 	zone_type: EZoneType;
 	color_set: boolean;
-	
+
 	constructor(
 				max_drones: number | undefined = undefined,
 				color: string | undefined = undefined,
@@ -23,6 +23,14 @@ class NodeMetadata {
 	setColor(color: string) {
 		this.color = color;
 		this.color_set = true;
+	}
+
+	setMaxDrones(max_drones: number) {
+		this.max_drones = max_drones;
+	}
+
+	setZoneType(zone_type: EZoneType) {
+		this.zone_type = zone_type;
 	}
 
 	static parse(metadata_str: string, at_line: number, data_result: MapData): NodeMetadata {

@@ -3,6 +3,7 @@ import { Connection } from './connection';
 import type { MapData } from './map_loader';
 
 
+/** @deprecated use network store instead */
 class Network {
 	nb_drones: number;
 	nodes: Node[];

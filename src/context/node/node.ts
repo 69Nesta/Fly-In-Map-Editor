@@ -29,6 +29,39 @@ class Node {
 		this.connections = [];
 	}
 
+	setPosition(x: number, y: number) {
+		this.x = x;
+		this.y = y;
+	}
+
+	setColor(color: string) {
+		this.metadata.setColor(color);
+	}
+
+	setMaxDrones(max_drones: number) {
+		this.metadata.setMaxDrones(max_drones);
+	}
+
+	setZoneType(zone_type: EZoneType) {
+		this.metadata.setZoneType(zone_type);
+	}
+
+	setEnd(is_end: boolean = true) {
+		this.is_end = is_end;
+	}
+
+	setStart(is_start: boolean = true) {
+		this.is_start = is_start;
+	}
+
+	addConnection(connection: Connection) {
+		this.connections.push(connection);
+	}
+
+	removeConnection(connection: Connection) {
+		this.connections = this.connections.filter(conn => conn !== connection);
+	}
+
 	static parse(line: string, at_line: number, data_result: MapData): Node | null {
 		const [, node_type, name, x_str, y_str, metadata_str] = RE_NODE.exec(line) ?? [];
 		if (node_type && name && x_str && y_str) {
