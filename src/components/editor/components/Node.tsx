@@ -2,9 +2,9 @@ import { type Node as NodeContext } from '@/context/node';
 import { useNetworkStore } from '@/store/network_store';
 import { useEditorStore } from '@/store/editor_store';
 
+import { useRef, useState, useEffect } from 'react';
 import { Circle, Text } from 'react-konva';
 import type Konva from 'konva';
-import { useRef } from 'react';
 
 
 interface NodeProps {
@@ -15,8 +15,10 @@ interface NodeProps {
 const Node = ({ node }: NodeProps) => {
 	const network = useNetworkStore();
 	const currentTool = useEditorStore((s) => s.currentTool);
+	const currentSelectedElement = useEditorStore((s) => s.currentSelectedElement);
 	const setCurrentSelectedElement = useEditorStore((s) => s.setCurrentSelectedElement);
 	const textRef = useRef<Konva.Text>(null);
+	const [isHovered, setIsHovered] = useState(false);
 
 	const handleDragMove = (e: Konva.KonvaEventObject<DragEvent>) => {
 		const element = e.target;
@@ -38,8 +40,7 @@ const Node = ({ node }: NodeProps) => {
 				return;
 			}
 		}
-		node.setPosition(x, y);
-		textRef.current?.position({ x: x - 1, y: y + 0.25 });
+		network.moveNode(node, x, y);
 	};
 
 	const handleClick = () => {
@@ -47,15 +48,22 @@ const Node = ({ node }: NodeProps) => {
 			setCurrentSelectedElement(node);
 	};
 
+	useEffect(() => {
+		if (currentSelectedElement !== node)
+			setIsHovered(false);
+	}, [currentSelectedElement]);
+
 	return (
 		<>
 			<Circle
 				key={`${node.name}-circle`}
 				x={node.x} y={node.y}
-				radius={node.is_start || node.is_end ? 0.18 : 0.16}
+				radius={0.16}
 				fill={node.metadata.color}
-				stroke={node.is_start || node.is_end ? '#ffffff' : undefined}
-				strokeWidth={0.04}
+				stroke={node.is_start ? '#ffffff' : node.is_end ? '#ffffff' : undefined}
+				strokeWidth={0.02}
+				scaleX={isHovered ? 1.1 : 1}
+				scaleY={isHovered ? 1.1 : 1}
 				draggable
 				perfectDrawEnabled
 				shadowColor='rgba(0,0,0,0.15)'
@@ -63,6 +71,15 @@ const Node = ({ node }: NodeProps) => {
 				shadowOffsetY={4}
 				onDragMove={handleDragMove}
 				onClick={handleClick}
+				onMouseEnter={(e) => {
+					e.target.getStage()?.container().style.setProperty('cursor', 'move');
+					setIsHovered(true);
+				}}
+				onMouseLeave={(e) => {
+					e.target.getStage()?.container().style.setProperty('cursor', 'default');
+					if (currentSelectedElement !== node)
+						setIsHovered(false);
+				}}
 			/>
 			<Text
 				ref={textRef}
