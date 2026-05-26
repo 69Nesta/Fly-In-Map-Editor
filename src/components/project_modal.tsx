@@ -50,12 +50,18 @@ export function ProjectModal() {
 		close();
 	}
 
+	const handleNewProject = () => {
+		network.clear();
+		setImportState(false);
+		close();
+	}
+
 	return (
 		<Dialog open={projectModalOpen} onOpenChange={(v) => setProjectModalOpen(!!v)}>
 			<DialogContent
-				showCloseButton={false}
-				onEscapeKeyDown={(e) => e.preventDefault()}
-				onPointerDownOutside={(e) => { e.preventDefault(); }}
+				// showCloseButton={false}
+				// onEscapeKeyDown={(e) => e.preventDefault()}
+				// onPointerDownOutside={(e) => { e.preventDefault(); }}
 			>
 				{!importState ? <DialogHeader>
 						<DialogTitle></DialogTitle>
@@ -73,7 +79,7 @@ export function ProjectModal() {
 							</EmptyHeader>
 							<EmptyContent className='flex-row justify-center gap-2'>
 								<Button onClick={() => setImportState(true)} variant='outline'>Import Project</Button>
-								<Button onClick={close} autoFocus>Create New Project</Button>
+								<Button onClick={handleNewProject} autoFocus>Create New Project</Button>
 							</EmptyContent>
 						</Empty>
 					</DialogHeader>

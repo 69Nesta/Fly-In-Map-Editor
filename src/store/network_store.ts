@@ -25,6 +25,7 @@ export type NetworkStore = {
 	editConnection: (connection: Connection, new_from: Node, new_to: Node) => void;
 	changeConnectionMaxLinkCapacity: (connection: Connection, max_link_capacity: number) => void;
 
+	clear: () => void;
 	import: (data: MapData) => void;
 	export: () => string[];
 };
@@ -149,6 +150,14 @@ export const useNetworkStore = create<NetworkStore>((set) => ({
 				return c;
 			}),
 		})),
+
+
+	clear: () =>
+		set({
+			nb_drones: 0,
+			nodes: [],
+			connections: [],
+		}),
 
 	import: (data) =>
 		set({

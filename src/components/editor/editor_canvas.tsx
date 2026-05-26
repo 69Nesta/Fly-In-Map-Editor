@@ -10,6 +10,7 @@ import { NodesLayer } from './layers/nodes_layers';
 import { handleWheel } from './hook/handle_wheel';
 import { Stage } from 'react-konva'
 import Konva from 'konva'
+import { keydownHook } from './hook/keydown_hook';
 
 
 interface EditorCanvasProps {
@@ -65,8 +66,8 @@ export function EditorCanvas({ parent }: EditorCanvasProps) {
 	}, [parent]);
 
 	useEffect(() => {
-		window.addEventListener('keydown', handleDelete);
-		return () => window.removeEventListener('keydown', handleDelete);
+		window.addEventListener('keydown', (e) => keydownHook(e, editorStore));
+		return () => window.removeEventListener('keydown', (e) => keydownHook(e, editorStore));
 	}, []);
 
 	const handleClick = (e: Konva.KonvaEventObject<MouseEvent>) => {

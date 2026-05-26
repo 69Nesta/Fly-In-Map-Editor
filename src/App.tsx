@@ -1,11 +1,13 @@
 import { CurrentSelectedElement } from '@/components/editor/overlay/current_selected_element';
-// import { ActionTopRight } from '@/components/action_top_right';
+import { ActionTopLeft } from '@/components/action_top_left';
 import { ProjectModal } from '@/components/project_modal';
-import { useEffect, useRef, type RefObject } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import { EditorCanvas } from '@/components/editor';
 import { ToolBar } from '@/components/editor/overlay/tool_bar';
 import { useNetworkStore } from './store/network_store';
 import { MapLoader } from './context/map_loader';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft } from 'lucide-react';
 
 import {
 	ResizableHandle,
@@ -36,6 +38,7 @@ const map: MapLoader = new MapLoader([
 const App = () => {
 	const network = useNetworkStore();
 	const editorBoxRef: RefObject<HTMLDivElement | null> = useRef(null);
+	const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
 
 	useEffect(() => {
 		network.import(map.data);
@@ -50,14 +53,29 @@ const App = () => {
 
 						<CurrentSelectedElement />
 						{/* <ActionTopRight /> */}
+						<ActionTopLeft />
 						<ToolBar />
 						<ProjectModal />
+						{!isRightPanelVisible && (
+							<Button
+								variant='outline'
+								size='sm'
+								className='absolute top-2 right-2 z-20'
+								onClick={() => setIsRightPanelVisible(true)}
+								aria-label='Show right panel'
+							>
+								<ChevronLeft />
+								Show panel
+							</Button>
+						)}
 					</div>
 				</ResizablePanel>
-				<ResizableHandle withHandle />
-				<ResizablePanel defaultSize={'20%'} maxSize={'40%'} minSize={'15%'}>
-					<RightPanel />
-				</ResizablePanel>
+				{isRightPanelVisible && <ResizableHandle withHandle />}
+				{isRightPanelVisible && (
+					<ResizablePanel defaultSize={'24%'} maxSize={'40%'} minSize={'15%'}>
+						<RightPanel onHide={() => setIsRightPanelVisible(false)} />
+					</ResizablePanel>
+				)}
 			</ResizablePanelGroup>
 		</div>
 	);
