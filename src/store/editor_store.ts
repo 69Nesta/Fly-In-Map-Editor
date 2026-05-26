@@ -34,7 +34,7 @@ export type EditorStore = {
 };
 
 export const useEditorStore = create<EditorStore>((set) => ({
-	projectModalOpen: false,
+	projectModalOpen: true,
 	setProjectModalOpen: (open) =>
 		set({
 			projectModalOpen: open,
