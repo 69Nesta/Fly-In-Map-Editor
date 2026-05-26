@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { EZoneType, Node } from '@/context/node';
-import { Connection } from '@/context/connection';
+import { type Connection } from '@/context/connection';
 import { type MapData } from '@/context/map_loader';
 
 
@@ -23,6 +23,7 @@ export type NetworkStore = {
 	addConnection: (connection: Connection) => void;
 	removeConnection: (connection: Connection) => void;
 	editConnection: (connection: Connection, new_from: Node, new_to: Node) => void;
+	changeConnectionMaxLinkCapacity: (connection: Connection, max_link_capacity: number) => void;
 
 	import: (data: MapData) => void;
 	export: () => string[];
@@ -130,8 +131,23 @@ export const useNetworkStore = create<NetworkStore>((set) => ({
 	editConnection: (connection, new_from, new_to) =>
 		set((state) => ({
 			connections: state.connections.map((c) =>
-				c === connection ? new Connection(connection.id, new_from, new_to, connection.metadata) : c
+				c === connection
+					? Object.assign(c, {
+						id: `${new_from.name}-${new_to.name}`,
+						node1: new_from,
+						node2: new_to,
+					})
+					: c
 			),
+		})),
+		changeConnectionMaxLinkCapacity: (connection, max_link_capacity) =>
+		set((state) => ({
+			connections: state.connections.map((c) => {
+				if (c === connection)
+					c.metadata.max_link_capacity = max_link_capacity;
+
+				return c;
+			}),
 		})),
 
 	import: (data) =>

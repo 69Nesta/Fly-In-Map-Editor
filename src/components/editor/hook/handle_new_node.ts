@@ -12,7 +12,7 @@ export function handleNewNode(network: NetworkStore, e: Konva.KonvaEventObject<M
 	const y = Math.round(pos.y);
 
 	if (network.nodes.some(n => n.x === x && n.y === y)) return;
-	
+
 	const names = network.nodes.map(n => n.name);
 	let i = 1;
 	while (names.includes(`node_${i.toString(16)}`))

@@ -1,11 +1,18 @@
-import { CurrentSelectedElement } from '@/components/current_selected_element';
-import { ActionTopRight } from '@/components/action_top_right';
+import { CurrentSelectedElement } from '@/components/editor/overlay/current_selected_element';
+// import { ActionTopRight } from '@/components/action_top_right';
 import { ProjectModal } from '@/components/project_modal';
+import { useEffect, useRef, type RefObject } from 'react';
 import { EditorCanvas } from '@/components/editor';
-import { ToolBar } from '@/components/tool_bar';
-import { useEffect } from 'react';
+import { ToolBar } from '@/components/editor/overlay/tool_bar';
 import { useNetworkStore } from './store/network_store';
 import { MapLoader } from './context/map_loader';
+
+import {
+	ResizableHandle,
+	ResizablePanel,
+	ResizablePanelGroup,
+} from '@/components/ui/resizable'
+import { RightPanel } from './components/right_panel/right_panel';
 
 
 const map: MapLoader = new MapLoader([
@@ -28,19 +35,30 @@ const map: MapLoader = new MapLoader([
 
 const App = () => {
 	const network = useNetworkStore();
+	const editorBoxRef: RefObject<HTMLDivElement | null> = useRef(null);
 
 	useEffect(() => {
 		network.import(map.data);
 	}, []);
 
 	return (
-		<div className={'relative'}>
-			<EditorCanvas />
+		<div className='flex w-screen h-screen'>
+			<ResizablePanelGroup orientation='horizontal'>
+				<ResizablePanel>
+					<div ref={editorBoxRef} className={'relative w-full h-full'}>
+						<EditorCanvas parent={editorBoxRef} />
 
-			<CurrentSelectedElement />
-			<ActionTopRight />
-			<ToolBar />
-			<ProjectModal />
+						<CurrentSelectedElement />
+						{/* <ActionTopRight /> */}
+						<ToolBar />
+						<ProjectModal />
+					</div>
+				</ResizablePanel>
+				<ResizableHandle withHandle />
+				<ResizablePanel defaultSize={'20%'} maxSize={'40%'} minSize={'15%'}>
+					<RightPanel />
+				</ResizablePanel>
+			</ResizablePanelGroup>
 		</div>
 	);
 };

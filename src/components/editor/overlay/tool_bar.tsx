@@ -12,7 +12,7 @@ export function ToolBar() {
 	const setTool = useEditorStore((s) => s.setTool);
 
 	return <>
-		<div className='fixed bottom-2 left-0 w-full flex justify-center'>
+		<div className='absolute bottom-2 left-0 w-full flex justify-center'>
 			<Card className='px-4 py-3 flex-row gap-3'>
 				<Button variant={currentTool === 'select' ? 'default' : 'outline'} onClick={() => setTool('select')} size='icon'>
 					<Pointer />

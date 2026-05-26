@@ -82,7 +82,7 @@ class Node {
 	}
 
 	export(): string {
-		const type_str = this.is_start ? 'start_hub' : this.is_end ? 'end_hub' : 'node';
+		const type_str = this.is_start ? 'start_hub' : this.is_end ? 'end_hub' : 'hub';
 		const metadata_str = this.metadata.export();
 
 		return `${type_str}: ${this.name} ${this.x} ${this.y}${metadata_str ? ` ${metadata_str}` : ''}`;

@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react';
-
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,15 +9,25 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select';
-import { ENodeColor } from '@/enums/node_color';
-import { EZoneType, Node } from '@/context/node';
-import { useEditorStore } from '@/store/editor_store';
+
 import { useNetworkStore } from '@/store/network_store';
+import { useEditorStore } from '@/store/editor_store';
+import { EZoneType, Node } from '@/context/node';
+import { ENodeColor } from '@/enums/node_color';
+import { useEffect, useState } from 'react';
+import { Trash2 } from 'lucide-react';
+
 
 const colorOptions = Object.values(ENodeColor);
 const zoneOptions = Object.values(EZoneType);
 
-export function CurrentSelectedElement() {
+
+interface EditNodeCardContentProps {
+	selectedNode: Node;
+}
+
+
+export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) {
 	const currentSelectedElement = useEditorStore((s) => s.currentSelectedElement);
 	const nodes = useNetworkStore((s) => s.nodes);
 	const changeNodeName = useNetworkStore((s) => s.changeNodeName);
@@ -30,7 +38,6 @@ export function CurrentSelectedElement() {
 	const changeIsStart = useNetworkStore((s) => s.changeIsStart);
 	const changeIsEnd = useNetworkStore((s) => s.changeIsEnd);
 
-	const selectedNode = currentSelectedElement instanceof Node ? currentSelectedElement : null;
 	const selectedNodeInStore = selectedNode
 		? nodes.find((node) => node.name === selectedNode.name) ?? selectedNode
 		: null;
@@ -69,7 +76,6 @@ export function CurrentSelectedElement() {
 	const commitPosition = (nextX: string, nextY: string): boolean => {
 		const parsedX = Number(nextX);
 		const parsedY = Number(nextY);
-		
 
 		if (Number.isFinite(parsedX) && Number.isFinite(parsedY))
 		{
@@ -95,7 +101,7 @@ export function CurrentSelectedElement() {
 			: 'Node';
 
 	return (
-		<Card className='fixed left-4 top-4 z-50 w-[min(24rem,calc(100vw-2rem))] border-border/60 bg-card/95 shadow-lg backdrop-blur supports-[backdrop-filter]:bg-card/80'>
+		<>
 			<CardHeader className='gap-2 border-b border-border/60 pb-4'>
 				<CardTitle>Node inspector</CardTitle>
 				<CardDescription>
@@ -242,7 +248,21 @@ export function CurrentSelectedElement() {
 						</Button>
 					</div>
 				</div>
+				<div className='text-sm text-muted-foreground'>
+					Note: start hubs are where drones take off from, end hubs are where drones deliver their packages. Normal nodes are just transit points. A node can't be both a start and an end hub at the same time.
+				</div>
+				<div>
+					<Button variant='destructive' onClick={() => {
+						if (window.confirm('Are you sure you want to delete this node? This will also delete all connections linked to this node.'))
+						{
+							useNetworkStore.getState().removeNode(selectedNodeInStore);
+							useEditorStore.getState().setCurrentSelectedElement(null);
+						}
+					}}>
+						<Trash2 />Delete node
+					</Button>
+				</div>
 			</CardContent>
-		</Card>
+		</>
 	);
 }

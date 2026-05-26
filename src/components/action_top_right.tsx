@@ -27,7 +27,7 @@ export function ActionTopRight() {
 	}
 
 	return (
-		<div className='fixed top-2 right-2 gap-2 flex'>
+		<div className='absolute top-2 right-2 gap-2 flex'>
 			<Button variant='outline' size='icon' onClick={handleExport}>
 				{exportIconState === 'generating' ? <Spinner data-icon="inline-start" /> : ''}
 				{exportIconState === 'copied' ? <ClipboardCheck /> : ''}

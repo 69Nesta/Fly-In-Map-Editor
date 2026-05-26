@@ -1,83 +1,105 @@
 import { handleUnselectElement } from './hook/handle_unselect_element';
 import { MemoBackgroundLayer } from './layers/background_layer';
 import { ConnectionsLayer } from './layers/connections_layer';
-import { useRef, type RefObject, useEffect } from 'react'
+import { handleDelete } from './hook/handle_delete';
+import { useRef, type RefObject, useEffect, useMemo } from 'react'
 import { useNetworkStore } from '@/store/network_store';
 import { handleNewNode } from './hook/handle_new_node';
 import { useEditorStore } from '@/store/editor_store';
 import { NodesLayer } from './layers/nodes_layers';
+import { handleWheel } from './hook/handle_wheel';
 import { Stage } from 'react-konva'
 import Konva from 'konva'
 
 
-export function EditorCanvas() {
+interface EditorCanvasProps {
+	parent: RefObject<HTMLDivElement | null>;
+}
+
+
+export function EditorCanvas({ parent }: EditorCanvasProps) {
 	const stageRef: RefObject<Konva.Stage | null> = useRef<Konva.Stage | null>(null);
-	const screenSize: RefObject<{ width: number, height: number }> = useRef({
-		width: window.innerWidth,
-		height: window.innerHeight
+	const getScreenSize = () => ({
+		width: parent.current?.offsetWidth || window.innerWidth,
+		height: parent.current?.offsetHeight || window.innerHeight,
 	});
-	const scaleBy: number = 1.05;
+	const screenSize: RefObject<{ width: number, height: number }> = useRef({
+		...getScreenSize(),
+	});
 	const currentTool = useEditorStore((s) => s.currentTool);
 	const networkStore = useNetworkStore();
 	const editorStore = useEditorStore();
+	const currentCursorType = useEditorStore((s) => s.currentCursorType);
 
-    useEffect(() => {
-		const handleResize = () => {
-			screenSize.current = { width: window.innerWidth, height: window.innerHeight };
+	useEffect(() => {
+		const syncSize = () => {
+			screenSize.current = getScreenSize();
 			if (stageRef.current) {
 				stageRef.current.width(screenSize.current.width);
 				stageRef.current.height(screenSize.current.height);
 			}
 		}
 
-        window.addEventListener("resize", handleResize);
+		let resizeObserver: ResizeObserver | null = null;
+		let frameId: number | null = null;
 
-        return () => {
-            window.removeEventListener("resize", handleResize)
-        }
-    }, []);
+		const startObservingParent = () => {
+			if (!parent.current) {
+				frameId = window.requestAnimationFrame(startObservingParent);
+				return;
+			}
 
-	const handleWheel = (e: Konva.KonvaEventObject<WheelEvent>) => {
-		e.evt.preventDefault();
-		if (!stageRef.current) return;
+			syncSize();
+			resizeObserver = new ResizeObserver(syncSize);
+			resizeObserver.observe(parent.current);
+		}
 
-		const stage: Konva.Stage = stageRef.current;
-		const oldScale: number = stage.scaleX();
-		const pointer: { x: number; y: number } | null = stage.getPointerPosition();
+		startObservingParent();
+		window.addEventListener('resize', syncSize);
 
-		if (!pointer) return;
-		const mousePointTo: { x: number; y: number } = {
-			x: (pointer.x - stage.x()) / oldScale,
-			y: (pointer.y - stage.y()) / oldScale,
-		};
+		return () => {
+			window.removeEventListener('resize', syncSize);
+			resizeObserver?.disconnect();
+			if (frameId !== null) window.cancelAnimationFrame(frameId);
+		}
+	}, [parent]);
 
-		let direction: number = e.evt.deltaY > 0 ? -1 : 1;
-		if (e.evt.ctrlKey)
-			direction = -direction;
-
-		let newScale: number = direction > 0 ? oldScale * scaleBy : oldScale / scaleBy;
-		newScale = Math.max(10, Math.min(400, newScale));
-		stage.scale({ x: newScale, y: newScale });
-		stage.position({
-			x: pointer.x - mousePointTo.x * newScale,
-			y: pointer.y - mousePointTo.y * newScale,
-		});
-	};
+	useEffect(() => {
+		window.addEventListener('keydown', handleDelete);
+		return () => window.removeEventListener('keydown', handleDelete);
+	}, []);
 
 	const handleClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
 		e.evt.preventDefault();
 		if (e.target !== stageRef.current) return;
-		
+
 		if (currentTool === 'node')
 			handleNewNode(networkStore, e);
 
 		handleUnselectElement(editorStore);
 	}
 
+	const calculateCursor = () => {
+		if (currentCursorType === 'hover_connection' || currentCursorType === 'hover_node')
+			return 'pointer';
+
+		if (currentTool === 'select')
+			return currentCursorType === 'drag_node' ? 'grabbing' : 'default';
+		else if (currentTool === 'node')
+			return 'crosshair';
+		else if (currentTool === 'connection')
+			return 'default';
+	}
+
+	const cursor = useMemo(() => calculateCursor(), [currentCursorType, currentTool]);
+
 	return (
 		<Stage
 			ref={stageRef}
 			className={'absolute'}
+			style={{
+				cursor: cursor,
+			}}
 			width={screenSize.current.width}
 			height={screenSize.current.height}
 			scaleX={80} scaleY={80}
