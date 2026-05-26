@@ -2,7 +2,7 @@
 
 A powerful visual editor for designing and managing drone network topologies. Create interactive maps with nodes (hubs, waypoints) and connections (routes) for autonomous drone systems with an intuitive canvas-based interface.
 
-## [Live Demo](https://flyin-editor.cheznestor.fr)
+## [Live Demo - flyin-editor.cheznestor.fr](https://flyin-editor.cheznestor.fr)
 
 ## Features
 
@@ -196,6 +196,10 @@ We welcome contributions! To get started:
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Authors
+- [@69Nesta](https://github.com/69Nesta) ([rpetit](https://profile.intra.42.fr/users/rpetit))
+
 
 ## Support
 
