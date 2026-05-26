@@ -1,7 +1,6 @@
 import { handleUnselectElement } from './hook/handle_unselect_element';
 import { MemoBackgroundLayer } from './layers/background_layer';
 import { ConnectionsLayer } from './layers/connections_layer';
-import { handleDelete } from './hook/handle_delete';
 import { useRef, type RefObject, useEffect, useMemo } from 'react'
 import { useNetworkStore } from '@/store/network_store';
 import { handleNewNode } from './hook/handle_new_node';

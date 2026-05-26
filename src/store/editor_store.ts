@@ -42,9 +42,10 @@ export const useEditorStore = create<EditorStore>((set) => ({
 
 	currentTool: 'select',
 	setTool: (tool) =>
-		set({
+		set((state) => ({
 			currentTool: tool,
-		}),
+			pendingConnectionFrom: state.pendingConnectionFrom && tool !== 'connection' ? null : state.pendingConnectionFrom,
+		})),
 
 	currentSelectedElement: null,
 	setCurrentSelectedElement: (node) =>

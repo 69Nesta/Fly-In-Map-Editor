@@ -4,9 +4,6 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
 
-
-
-
 export function ToolBar() {
 	const currentTool = useEditorStore((s) => s.currentTool);
 	const setTool = useEditorStore((s) => s.setTool);
