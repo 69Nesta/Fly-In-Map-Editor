@@ -6,9 +6,9 @@ const scaleBy: number = 1.05;
 
 export const handleWheel = (e: Konva.KonvaEventObject<WheelEvent>) => {
 	e.evt.preventDefault();
-	if (!e.target.getStage()) return;
+	const stage: Konva.Stage | null = e.target.getStage();
+	if (!stage) return;
 
-	const stage: Konva.Stage = e.target.getStage();
 	const oldScale: number = stage.scaleX();
 	const pointer: { x: number; y: number } | null = stage.getPointerPosition();
 

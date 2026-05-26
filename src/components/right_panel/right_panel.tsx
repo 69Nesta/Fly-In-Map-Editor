@@ -1,11 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
-import { ChevronRight, Copy, Loader2, MinusIcon, PanelRightClose, PlusIcon } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { useClipboard } from '@/hooks/clipboard';
-import { useNetworkStore } from '@/store/network_store';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGroupTextarea } from '../ui/input-group';
+import { ChevronRight, Copy, Loader2, MinusIcon, PanelRightClose, PlusIcon } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Button } from '@/components/ui/button';
+
+import { useNetworkStore } from '@/store/network_store';
+import { useClipboard } from '@/hooks/clipboard';
 
 type RightPanelProps = {
 	onHide: () => void;

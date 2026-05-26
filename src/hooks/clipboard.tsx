@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 function useCopyToClipboard(resetDelay = 2000) {
 	const [copied, setCopied] = useState(false);
 
-	const copy = useCallback(async (text) => {
+	const copy = useCallback(async (text: string) => {
 		await useClipboard(text);
 		setCopied(true);
 		setTimeout(() => setCopied(false), resetDelay);

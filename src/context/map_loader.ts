@@ -1,5 +1,5 @@
-import { Node } from './node';
 import { Connection } from './connection';
+import { Node } from './node';
 
 
 const RE_NB_DRONES: RegExp = /^nb_drones:\s*(\d+)$/;
@@ -23,9 +23,6 @@ class MapData {
 	nb_drones: number;
 	nodes: Node[];
 	connections: Connection[];
-
-	start_hub: Node;
-	end_hub: Node;
 
 	warnings: {line: string, line_number: number, message: string}[];
 	errors: {line: string, line_number: number, message: string}[];
@@ -148,9 +145,6 @@ class MapLoader {
 				message: 'Multiple start hubs defined.'
 			});
 		}
-		else {
-			this.data.start_hub = start_hubs[0];
-		}
 
 		if (end_hubs.length === 0) {
 			this.data.errors.push({
@@ -166,10 +160,7 @@ class MapLoader {
 				message: 'Multiple end hubs defined.'
 			});
 		}
-		else {
-			this.data.end_hub = end_hubs[0];
-		}
-	}
+	} 
 }
 
 
