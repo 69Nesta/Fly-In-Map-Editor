@@ -1,7 +1,7 @@
 import { CurrentSelectedElement } from '~/components/editor/overlay/current_selected_element';
 import { ActionTopLeft } from '~/components/action_top_left';
 import { ProjectModal } from '~/components/project_modal';
-import { useRef, useState, type RefObject } from 'react';
+import { ReactElement, useRef, useState, type RefObject } from 'react';
 import { EditorCanvas } from '~/components/editor';
 import { ToolBar } from '~/components/editor/overlay/tool_bar';
 import { Button } from '~/components/ui/button';
@@ -13,6 +13,8 @@ import {
 	ResizablePanelGroup,
 } from '~/components/ui/resizable'
 import { RightPanel } from '~/components/right_panel/right_panel';
+import DefaultLayout from '~/layouts/default';
+import { Data } from '@generated/data';
 
 export default function Home() {
 	const editorBoxRef: RefObject<HTMLDivElement | null> = useRef(null);

@@ -4,7 +4,7 @@ import { usePage } from '@inertiajs/react'
 import { ReactElement, useEffect } from 'react'
 // import { Form, Link } from '@adonisjs/inertia/react'
 
-export default function Layout({ children }: { children: ReactElement<Data.SharedProps> }) {
+export default function DefaultLayout({ children }: { children: ReactElement<Data.SharedProps> }) {
 	useEffect(() => {
 		toast.dismiss()
 	}, [usePage().url])

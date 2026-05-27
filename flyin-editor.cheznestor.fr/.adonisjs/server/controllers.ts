@@ -4,6 +4,9 @@
  */
 
 export const controllers = {
-  NewAccount: () => import('#controllers/new_account_controller'),
+  admin: {
+    Users: () => import('#controllers/admin/users_controller'),
+  },
+  IntraAuth: () => import('#controllers/intra_auth_controller'),
   Session: () => import('#controllers/session_controller'),
 }

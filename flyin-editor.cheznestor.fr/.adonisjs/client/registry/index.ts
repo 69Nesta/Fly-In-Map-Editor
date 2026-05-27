@@ -12,17 +12,17 @@ const routes = {
     tokens: [{"old":"/","type":0,"val":"/","end":""}],
     types: placeholder as Registry['home']['types'],
   },
-  'new_account.create': {
+  'intra.redirect': {
     methods: ["GET","HEAD"],
-    pattern: '/signup',
-    tokens: [{"old":"/signup","type":0,"val":"signup","end":""}],
-    types: placeholder as Registry['new_account.create']['types'],
+    pattern: '/oauth/intra/redirect',
+    tokens: [{"old":"/oauth/intra/redirect","type":0,"val":"oauth","end":""},{"old":"/oauth/intra/redirect","type":0,"val":"intra","end":""},{"old":"/oauth/intra/redirect","type":0,"val":"redirect","end":""}],
+    types: placeholder as Registry['intra.redirect']['types'],
   },
-  'new_account.store': {
-    methods: ["POST"],
-    pattern: '/signup',
-    tokens: [{"old":"/signup","type":0,"val":"signup","end":""}],
-    types: placeholder as Registry['new_account.store']['types'],
+  'intra.callback': {
+    methods: ["GET","HEAD"],
+    pattern: '/oauth/intra/callback',
+    tokens: [{"old":"/oauth/intra/callback","type":0,"val":"oauth","end":""},{"old":"/oauth/intra/callback","type":0,"val":"intra","end":""},{"old":"/oauth/intra/callback","type":0,"val":"callback","end":""}],
+    types: placeholder as Registry['intra.callback']['types'],
   },
   'session.create': {
     methods: ["GET","HEAD"],
@@ -30,17 +30,35 @@ const routes = {
     tokens: [{"old":"/login","type":0,"val":"login","end":""}],
     types: placeholder as Registry['session.create']['types'],
   },
-  'session.store': {
-    methods: ["POST"],
-    pattern: '/login',
-    tokens: [{"old":"/login","type":0,"val":"login","end":""}],
-    types: placeholder as Registry['session.store']['types'],
-  },
-  'session.destroy': {
+  'logout': {
     methods: ["POST"],
     pattern: '/logout',
     tokens: [{"old":"/logout","type":0,"val":"logout","end":""}],
+    types: placeholder as Registry['logout']['types'],
+  },
+  'session.destroy': {
+    methods: ["GET","HEAD"],
+    pattern: '/logout',
+    tokens: [{"old":"/logout","type":0,"val":"logout","end":""}],
     types: placeholder as Registry['session.destroy']['types'],
+  },
+  'admin.home': {
+    methods: ["GET","HEAD"],
+    pattern: '/admin',
+    tokens: [{"old":"/admin","type":0,"val":"admin","end":""}],
+    types: placeholder as Registry['admin.home']['types'],
+  },
+  'admin.users.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/admin/users',
+    tokens: [{"old":"/admin/users","type":0,"val":"admin","end":""},{"old":"/admin/users","type":0,"val":"users","end":""}],
+    types: placeholder as Registry['admin.users.index']['types'],
+  },
+  'admin.users.updateAdmin': {
+    methods: ["PUT"],
+    pattern: '/admin/users/:id/admin',
+    tokens: [{"old":"/admin/users/:id/admin","type":0,"val":"admin","end":""},{"old":"/admin/users/:id/admin","type":0,"val":"users","end":""},{"old":"/admin/users/:id/admin","type":1,"val":"id","end":""},{"old":"/admin/users/:id/admin","type":0,"val":"admin","end":""}],
+    types: placeholder as Registry['admin.users.updateAdmin']['types'],
   },
 } as const satisfies Record<string, AdonisEndpoint>
 

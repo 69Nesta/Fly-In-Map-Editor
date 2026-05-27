@@ -1,49 +1,21 @@
-import { Form } from '@adonisjs/inertia/react'
+import { Button } from '~/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
 
 export default function Login() {
 	return (
-		<div className="form-container">
-			<div>
-				<h1> Login </h1>
-				<p>Enter your details below to login to your account</p>
-			</div>
+		<div className="flex min-h-screen items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8">
+			<Card className="w-full max-w-md">
+				<CardHeader className="space-y-2 text-center">
+					<CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
+					<CardDescription>Sign in to your account to continue</CardDescription>
+				</CardHeader>
 
-			<div>
-				<Form route="session.store">
-					{({ errors }) => (
-						<>
-							<div>
-								<label htmlFor="email">Email</label>
-								<input
-									type="email"
-									name="email"
-									id="email"
-									autoComplete="username"
-									data-invalid={errors.email ? 'true' : undefined}
-								/>
-								{errors.email && <div>{errors.email}</div>}
-							</div>
-
-							<div>
-								<label htmlFor="password">Password</label>
-								<input
-									type="password"
-									name="password"
-									id="password"
-									autoComplete="current-password"
-								/>
-								{errors.password ? <span>{errors.password}</span> : ''}
-							</div>
-
-							<div>
-								<button type="submit" className="button">
-									Login
-								</button>
-							</div>
-						</>
-					)}
-				</Form>
-			</div>
+				<CardContent className="space-y-6">
+					<Button asChild className="w-full" variant="outline">
+						<a href="/oauth/intra/redirect">Continue with Intra 42</a>
+					</Button>
+				</CardContent>
+			</Card>
 		</div>
 	)
 }

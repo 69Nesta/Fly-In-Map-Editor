@@ -84,7 +84,7 @@ class NodeMetadata {
 			parts.push(`color=${this.color}`);
 		}
 		if (this.zone_type !== EZoneType.NORMAL) {
-			parts.push(`zone_type=${this.zone_type}`);
+			parts.push(`zone=${this.zone_type}`);
 		}
 
 		if (!parts.length)

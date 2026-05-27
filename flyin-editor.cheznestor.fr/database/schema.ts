@@ -8,24 +8,30 @@ import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
 export class UserSchema extends BaseModel {
-    static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
-    $columns = UserSchema.$columns
-
-    @column.dateTime({ autoCreate: true })
-    declare createdAt: DateTime
-
-    @column()
-    declare email: string
-
-    @column()
-    declare fullName: string | null
-
-    @column({ isPrimary: true })
-    declare id: number
-
-    @column({ serializeAs: null })
-    declare password: string
-
-    @column.dateTime({ autoCreate: true, autoUpdate: true })
-    declare updatedAt: DateTime | null
+  static $columns = ['avatarUrl', 'createdAt', 'email', 'firstName', 'fullName', 'id', 'intraId', 'isAdmin', 'lastName', 'login', 'token', 'updatedAt'] as const
+  $columns = UserSchema.$columns
+  @column()
+  declare avatarUrl: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare email: string | null
+  @column()
+  declare firstName: string | null
+  @column()
+  declare fullName: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare intraId: string
+  @column()
+  declare isAdmin: boolean
+  @column()
+  declare lastName: string | null
+  @column()
+  declare login: string
+  @column()
+  declare token: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
 }
