@@ -12,6 +12,7 @@ class ConnectionMetadata {
 
 	static parse(metadata_str: string | undefined, at_line: number, data_result: MapData): ConnectionMetadata {
 		const metadata = new ConnectionMetadata();
+		metadata_str = metadata_str?.trim();
 
 		if (metadata_str) {
 			const parts = metadata_str.split(',').map(part => part.trim());

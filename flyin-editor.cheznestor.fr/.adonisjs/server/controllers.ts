@@ -8,5 +8,6 @@ export const controllers = {
     Users: () => import('#controllers/admin/users_controller'),
   },
   IntraAuth: () => import('#controllers/intra_auth_controller'),
+  Projects: () => import('#controllers/projects_controller'),
   Session: () => import('#controllers/session_controller'),
 }

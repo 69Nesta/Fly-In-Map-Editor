@@ -5,7 +5,7 @@ export default class extends BaseSchema {
 
 	async up() {
 		this.schema.createTable(this.tableName, (table) => {
-			table.increments('id').notNullable()
+			table.uuid('id').primary().defaultTo(this.raw('gen_random_uuid()'))
 			table.string('login').notNullable().unique()
 			table.string('email', 254).nullable().unique()
 			table.string('token').notNullable()

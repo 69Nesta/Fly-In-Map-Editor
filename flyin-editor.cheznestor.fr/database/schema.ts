@@ -7,6 +7,29 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class ProjectSchema extends BaseModel {
+  static $columns = ['content', 'createdAt', 'description', 'id', 'name', 'thumbnailUrl', 'updatedAt', 'userId', 'visibility'] as const
+  $columns = ProjectSchema.$columns
+  @column()
+  declare content: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string | null
+  @column({ isPrimary: true })
+  declare id: string
+  @column()
+  declare name: string
+  @column()
+  declare thumbnailUrl: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare userId: string
+  @column()
+  declare visibility: string
+}
+
 export class UserSchema extends BaseModel {
   static $columns = ['avatarUrl', 'createdAt', 'email', 'firstName', 'fullName', 'id', 'intraId', 'isAdmin', 'lastName', 'login', 'token', 'updatedAt'] as const
   $columns = UserSchema.$columns
@@ -21,7 +44,7 @@ export class UserSchema extends BaseModel {
   @column()
   declare fullName: string | null
   @column({ isPrimary: true })
-  declare id: number
+  declare id: string
   @column()
   declare intraId: string
   @column()

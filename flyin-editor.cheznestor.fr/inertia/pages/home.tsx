@@ -1,11 +1,11 @@
 import { CurrentSelectedElement } from '~/components/editor/overlay/current_selected_element';
 import { ActionTopLeft } from '~/components/action_top_left';
 import { ProjectModal } from '~/components/project_modal';
-import { ReactElement, useRef, useState, type RefObject } from 'react';
+import { useRef, useState, type RefObject } from 'react';
 import { EditorCanvas } from '~/components/editor';
 import { ToolBar } from '~/components/editor/overlay/tool_bar';
 import { Button } from '~/components/ui/button';
-import { ChevronLeft, PanelRightOpen } from 'lucide-react';
+import { PanelRightOpen } from 'lucide-react';
 
 import {
 	ResizableHandle,
@@ -13,12 +13,21 @@ import {
 	ResizablePanelGroup,
 } from '~/components/ui/resizable'
 import { RightPanel } from '~/components/right_panel/right_panel';
-import DefaultLayout from '~/layouts/default';
-import { Data } from '@generated/data';
+import { useAutosave } from '~/hooks/use_autosave';
+import type { InertiaProps } from '~/types';
+import { ProjectSummary } from '~/types/project_summary';
 
-export default function Home() {
+type HomeProps = InertiaProps<{
+	project?: ProjectSummary | null;
+	projects?: ProjectSummary[];
+}>
+
+export default function Home(props: HomeProps) {
+	const project = props.project ?? null;
 	const editorBoxRef: RefObject<HTMLDivElement | null> = useRef(null);
 	const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
+
+	const { forceSave, isSaving } = useAutosave({ project });
 
 	return (
 		<div className='flex w-screen h-screen'>
@@ -28,7 +37,7 @@ export default function Home() {
 						<EditorCanvas parent={editorBoxRef} />
 
 						<CurrentSelectedElement />
-						<ActionTopLeft />
+						<ActionTopLeft onForceSave={forceSave} isSaving={isSaving} canForceSave={Boolean(project)} />
 						<ToolBar />
 						<ProjectModal />
 						{!isRightPanelVisible && (

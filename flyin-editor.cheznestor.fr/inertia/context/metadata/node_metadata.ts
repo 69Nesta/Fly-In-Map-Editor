@@ -35,6 +35,8 @@ class NodeMetadata {
 
 	static parse(metadata_str: string, at_line: number, data_result: MapData): NodeMetadata {
 		const metadata = new NodeMetadata();
+		if (!metadata_str || !metadata_str.trim())
+			return metadata;
 
 		const parts: string[] = metadata_str.split(' ').map(part => part.trim());
 		for (const part of parts) {

@@ -8,6 +8,10 @@ export type ScannedRoutes = {
     'intra.redirect': { paramsTuple?: []; params?: {} }
     'intra.callback': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
+    'projects.index': { paramsTuple?: []; params?: {} }
+    'projects.store': { paramsTuple?: []; params?: {} }
+    'projects.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'projects.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'logout': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'admin.home': { paramsTuple?: []; params?: {} }
@@ -19,6 +23,8 @@ export type ScannedRoutes = {
     'intra.redirect': { paramsTuple?: []; params?: {} }
     'intra.callback': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
+    'projects.index': { paramsTuple?: []; params?: {} }
+    'projects.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'admin.home': { paramsTuple?: []; params?: {} }
     'admin.users.index': { paramsTuple?: []; params?: {} }
@@ -28,14 +34,18 @@ export type ScannedRoutes = {
     'intra.redirect': { paramsTuple?: []; params?: {} }
     'intra.callback': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
+    'projects.index': { paramsTuple?: []; params?: {} }
+    'projects.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'admin.home': { paramsTuple?: []; params?: {} }
     'admin.users.index': { paramsTuple?: []; params?: {} }
   }
   POST: {
+    'projects.store': { paramsTuple?: []; params?: {} }
     'logout': { paramsTuple?: []; params?: {} }
   }
   PUT: {
+    'projects.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.users.updateAdmin': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }

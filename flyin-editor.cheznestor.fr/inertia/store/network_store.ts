@@ -28,6 +28,7 @@ export type NetworkStore = {
 	clear: () => void;
 	import: (data: MapData) => void;
 	export: () => string[];
+	export_cache: string[];
 };
 
 
@@ -167,6 +168,7 @@ export const useNetworkStore = create<NetworkStore>((set) => ({
 		}),
 
 	export: () => {
+		console.log('🖊 Exporting network data...');
 		const lines: string[] = [];
 
 		lines.push(`nb_drones: ${useNetworkStore.getState().nb_drones}`);
@@ -180,6 +182,11 @@ export const useNetworkStore = create<NetworkStore>((set) => ({
 			lines.push(connection.export());
 		lines.push('');
 
+		set({
+			export_cache: lines,
+		})
 		return lines;
-	}
+	},
+
+	export_cache: [],
 }));

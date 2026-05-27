@@ -30,6 +30,30 @@ const routes = {
     tokens: [{"old":"/login","type":0,"val":"login","end":""}],
     types: placeholder as Registry['session.create']['types'],
   },
+  'projects.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/projects',
+    tokens: [{"old":"/projects","type":0,"val":"projects","end":""}],
+    types: placeholder as Registry['projects.index']['types'],
+  },
+  'projects.store': {
+    methods: ["POST"],
+    pattern: '/projects',
+    tokens: [{"old":"/projects","type":0,"val":"projects","end":""}],
+    types: placeholder as Registry['projects.store']['types'],
+  },
+  'projects.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/projects/:id',
+    tokens: [{"old":"/projects/:id","type":0,"val":"projects","end":""},{"old":"/projects/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['projects.show']['types'],
+  },
+  'projects.update': {
+    methods: ["PUT"],
+    pattern: '/projects/:id',
+    tokens: [{"old":"/projects/:id","type":0,"val":"projects","end":""},{"old":"/projects/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['projects.update']['types'],
+  },
   'logout': {
     methods: ["POST"],
     pattern: '/logout',

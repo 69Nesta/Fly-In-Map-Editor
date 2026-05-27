@@ -55,6 +55,54 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/session_controller').default['create']>>>
     }
   }
+  'projects.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/projects'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'projects.store': {
+    methods: ["POST"]
+    pattern: '/projects'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'projects.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/projects/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'projects.update': {
+    methods: ["PUT"]
+    pattern: '/projects/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
   'logout': {
     methods: ["POST"]
     pattern: '/logout'

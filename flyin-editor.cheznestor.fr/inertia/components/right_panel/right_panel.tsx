@@ -2,15 +2,23 @@ import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput, InputGr
 import { ChevronRight, Copy, Loader2, MinusIcon, PanelRightClose, PlusIcon } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Button } from '~/components/ui/button';
+import { router, usePage } from '@inertiajs/react';
 
 import { useNetworkStore } from '~/store/network_store';
 import { useClipboard } from '~/hooks/clipboard';
+import { ProjectSummary } from '~/types/project_summary';
+
+type PageProps = {
+	project?: ProjectSummary | null;
+};
 
 type RightPanelProps = {
 	onHide: () => void;
 };
 
 export function RightPanel({ onHide }: RightPanelProps) {
+	const page = usePage<PageProps>();
+	const project = page.props.project ?? null;
 	const nbDrones = useNetworkStore((state) => state.nb_drones);
 	const setNbDrones = useNetworkStore((state) => state.setNbDrones);
 	const nodes = useNetworkStore((state) => state.nodes);
@@ -52,6 +60,20 @@ export function RightPanel({ onHide }: RightPanelProps) {
 		setIsCopying(true);
 		await useClipboard(exportCode);
 		window.setTimeout(() => setIsCopying(false), 350);
+	};
+
+	const handleSave = () => {
+		if (!project)
+			return;
+
+		router.put(`/projects/${project.id}`, {
+			name: project.name,
+			description: project.description,
+			visibility: project.visibility,
+			content: exportCode,
+		}, {
+			preserveScroll: true,
+		});
 	};
 
 	return (
@@ -113,10 +135,17 @@ export function RightPanel({ onHide }: RightPanelProps) {
 						<p className='text-sm font-medium'>Export map</p>
 						<p className='text-xs text-muted-foreground'>Generated asynchronously to keep the editor responsive.</p>
 					</div>
-					<Button variant='outline' size='sm' onClick={handleCopy} disabled={!exportCode || isCopying}>
-						{isCopying ? <Loader2 className='animate-spin' /> : exportCode ? <Copy /> : <ChevronRight />}
-						{copyLabel}
-					</Button>
+					<div className='flex gap-2'>
+						{project ? (
+							<Button variant='secondary' size='sm' onClick={handleSave} disabled={!exportCode}>
+								Save
+							</Button>
+						) : null}
+						<Button variant='outline' size='sm' onClick={handleCopy} disabled={!exportCode || isCopying}>
+							{isCopying ? <Loader2 className='animate-spin' /> : exportCode ? <Copy /> : <ChevronRight />}
+							{copyLabel}
+						</Button>
+					</div>
 				</div>
 
 				<InputGroup className='min-h-0 flex-1 items-start'>
