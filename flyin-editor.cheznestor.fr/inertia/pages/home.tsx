@@ -5,7 +5,7 @@ import { ReactElement, useRef, useState, type RefObject } from 'react';
 import { EditorCanvas } from '~/components/editor';
 import { ToolBar } from '~/components/editor/overlay/tool_bar';
 import { Button } from '~/components/ui/button';
-import { ChevronLeft } from 'lucide-react';
+import { ChevronLeft, PanelRightOpen } from 'lucide-react';
 
 import {
 	ResizableHandle,
@@ -28,20 +28,17 @@ export default function Home() {
 						<EditorCanvas parent={editorBoxRef} />
 
 						<CurrentSelectedElement />
-						{/* <ActionTopRight /> */}
 						<ActionTopLeft />
 						<ToolBar />
 						<ProjectModal />
 						{!isRightPanelVisible && (
 							<Button
 								variant='outline'
-								size='sm'
 								className='absolute top-2 right-2 z-20'
 								onClick={() => setIsRightPanelVisible(true)}
 								aria-label='Show right panel'
 							>
-								<ChevronLeft />
-								Show panel
+								<PanelRightOpen />
 							</Button>
 						)}
 					</div>
