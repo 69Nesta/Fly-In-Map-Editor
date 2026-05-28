@@ -42,18 +42,24 @@ export default function Home(props: HomeProps) {
 			setReadOnly(true);
 	}, [props.readOnly, setReadOnly])
 	const setCurrentProjectName = useEditorStore((state) => state.setCurrentProjectName);
-	const network = useNetworkStore();
+	// const network = useNetworkStore();
+	const import_map = useNetworkStore((state) => state.import);
+	const clear_map = useNetworkStore((state) => state.clear);
 
 	const { forceSave, isSaving } = useAutosave({ project, enabled: !isReadOnly });
 
 	useEffect(() => {
 		if (!project?.content)
+		{
+			clear_map();
+			setCurrentProjectName(null);
 			return;
+		}
 
 		setCurrentProjectName(project.name);
 		const mapLoader = new MapLoader(project.content.split('\n'));
-		network.import(mapLoader.data);
-	}, [project?.content, project?.id, project?.name, setCurrentProjectName]);
+		import_map(mapLoader.data);
+	}, [import_map, project?.content, project?.id,project?.name, setCurrentProjectName]);
 
 	return (
 		<div className='flex w-screen h-screen'>

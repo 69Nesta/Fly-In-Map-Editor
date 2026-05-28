@@ -97,7 +97,7 @@ export function ProjectModal() {
 	const projectModalOpen = useEditorStore((state) => state.projectModalOpen);
 	const setProjectModalOpen = useEditorStore((state) => state.setProjectModalOpen);
 	const setCurrentProjectName = useEditorStore((state) => state.setCurrentProjectName);
-	const network = useNetworkStore();
+	// const network = useNetworkStore();
 
 	const importRef: RefObject<HTMLTextAreaElement | null> = useRef<HTMLTextAreaElement | null>(null);
 	const [activeTab, setActiveTab] = useState<'open' | 'create' | 'import'>('open');
@@ -110,19 +110,9 @@ export function ProjectModal() {
 
 	const close = () => setProjectModalOpen(false);
 
-	// useEffect(() => {
-	// 	if (!project?.content)
-	// 		return;
-	// 	console.log('Loading project content into the editor');
-	// 	console.log(project.content);
-	// 	setCurrentProjectName(project.name);
-
-	// 	const lines: string[] = project.content.split('\n');
-	// 	const mapLoader = new MapLoader(lines);
-
-	// 	network.import(mapLoader.data);
-	// 	setProjectModalOpen(false);
-	// }, []);
+	useEffect(() => {
+		setProjectModalOpen(Boolean(!project));
+	}, [])
 
 	useEffect(() => {
 		if (typeof window === 'undefined')
@@ -273,7 +263,7 @@ export function ProjectModal() {
 
 	return (
 		<>
-			<Dialog open={projectModalOpen && !project} onOpenChange={(open) => setProjectModalOpen(Boolean(open))}>
+			<Dialog open={projectModalOpen} onOpenChange={(open) => setProjectModalOpen(Boolean(open))}>
 				<DialogContent className='sm:max-w-4xl'>
 				<DialogHeader className='space-y-3'>
 					<div className='flex items-start justify-between gap-4'>
