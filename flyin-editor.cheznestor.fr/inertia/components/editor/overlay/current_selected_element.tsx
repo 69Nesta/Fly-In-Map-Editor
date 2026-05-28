@@ -8,13 +8,9 @@ import { EditNodeCardContent } from './edit_node';
 
 
 type CurrentSelectedElementProps = {
-	readOnly?: boolean;
 };
 
-export function CurrentSelectedElement({ readOnly = false }: CurrentSelectedElementProps) {
-	if (readOnly)
-		return null;
-
+export function CurrentSelectedElement({ }: CurrentSelectedElementProps) {
 	const currentSelectedElement = useEditorStore((s) => s.currentSelectedElement);
 
 	if (!(currentSelectedElement instanceof Node) && !(currentSelectedElement instanceof Connection))

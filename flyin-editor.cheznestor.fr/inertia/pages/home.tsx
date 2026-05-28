@@ -30,19 +30,20 @@ type HomeProps = InertiaProps<{
 
 export default function Home(props: HomeProps) {
 	const project = props.project ?? null;
-	// const isReadOnly = Boolean(props.readOnly);
 	const canImport = props.canImport ?? false;
+	const readOnly = props.readOnly ?? false;
 	const editorBoxRef: RefObject<HTMLDivElement | null> = useRef(null);
 	const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
 	const setReadOnly = useEditorStore((s) => s.setReadOnly);
 	const isReadOnly = useEditorStore((s) => s.readOnly);
 
 	useEffect(() => {
-		if (props.readOnly)
+		if (readOnly)
 			setReadOnly(true);
-	}, [props.readOnly, setReadOnly])
+	}, [readOnly, setReadOnly])
+
 	const setCurrentProjectName = useEditorStore((state) => state.setCurrentProjectName);
-	// const network = useNetworkStore();
+
 	const import_map = useNetworkStore((state) => state.import);
 	const clear_map = useNetworkStore((state) => state.clear);
 

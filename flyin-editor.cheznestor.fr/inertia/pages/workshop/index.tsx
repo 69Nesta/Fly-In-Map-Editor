@@ -48,6 +48,11 @@ function WorkshopIndexPage({ projects }: WorkshopPageProps) {
 						</CardContent>
 					</Card>
 				))}
+				{projects.length === 0 && (
+					<div className='col-span-full rounded-md border border-border/70 bg-background/80 p-4 text-center text-sm text-muted-foreground'>
+						No public maps found.
+					</div>
+				)}
 			</div>
 		</div>
 	)

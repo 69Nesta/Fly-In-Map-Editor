@@ -10,4 +10,5 @@ export const controllers = {
   IntraAuth: () => import('#controllers/intra_auth_controller'),
   Projects: () => import('#controllers/projects_controller'),
   Session: () => import('#controllers/session_controller'),
+  Workshop: () => import('#controllers/workshop_controller'),
 }
