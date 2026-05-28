@@ -27,8 +27,6 @@ export function EditorCanvas({ parent }: EditorCanvasProps) {
 		...getScreenSize(),
 	});
 	const currentTool = useEditorStore((s) => s.currentTool);
-	const networkStore = useNetworkStore();
-	const editorStore = useEditorStore();
 	const currentCursorType = useEditorStore((s) => s.currentCursorType);
 	// const readOnly = useEditorStore((s) => s.readOnly);
 
@@ -66,8 +64,9 @@ export function EditorCanvas({ parent }: EditorCanvasProps) {
 	}, [parent]);
 
 	useEffect(() => {
-		window.addEventListener('keydown', (e) => keydownHook(e, editorStore));
-		return () => window.removeEventListener('keydown', (e) => keydownHook(e, editorStore));
+		const handleKeyDown = (e: KeyboardEvent) => keydownHook(e, useEditorStore.getState());
+		window.addEventListener('keydown', handleKeyDown);
+		return () => window.removeEventListener('keydown', handleKeyDown);
 	}, []);
 
 	const handleClick = (e: Konva.KonvaEventObject<MouseEvent>) => {
@@ -75,9 +74,9 @@ export function EditorCanvas({ parent }: EditorCanvasProps) {
 		if (e.target !== stageRef.current) return;
 
 		if (currentTool === 'node')
-			handleNewNode(networkStore, e);
+			handleNewNode(useNetworkStore.getState(), e);
 
-		handleUnselectElement(editorStore);
+		handleUnselectElement(useEditorStore.getState());
 	}
 
 	const calculateCursor = () => {

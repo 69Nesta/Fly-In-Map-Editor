@@ -15,7 +15,12 @@ interface NodeProps {
 
 
 const Node = ({ node }: NodeProps) => {
-	const network = useNetworkStore();
+	const x = useNetworkStore((state) => state.nodes.find((candidate) => candidate === node)?.x ?? node.x);
+	const y = useNetworkStore((state) => state.nodes.find((candidate) => candidate === node)?.y ?? node.y);
+	const name = useNetworkStore((state) => state.nodes.find((candidate) => candidate === node)?.name ?? node.name);
+	const color = useNetworkStore((state) => state.nodes.find((candidate) => candidate === node)?.metadata.color ?? node.metadata.color);
+	const isStart = useNetworkStore((state) => state.nodes.find((candidate) => candidate === node)?.is_start ?? node.is_start);
+	const isEnd = useNetworkStore((state) => state.nodes.find((candidate) => candidate === node)?.is_end ?? node.is_end);
 	const currentTool = useEditorStore((s) => s.currentTool);
 	const currentSelectedElement = useEditorStore((s) => s.currentSelectedElement);
 	const setCurrentSelectedElement = useEditorStore((s) => s.setCurrentSelectedElement);
@@ -44,13 +49,13 @@ const Node = ({ node }: NodeProps) => {
 
 		if (x === node.x && y === node.y)
 			return;
-		for (const n in network.nodes) {
-			if (network.nodes[n].x === x && network.nodes[n].y === y) {
+		for (const otherNode of useNetworkStore.getState().nodes) {
+			if (otherNode !== node && otherNode.x === x && otherNode.y === y) {
 				element.position({x: node.x, y: node.y});
 				return;
 			}
 		}
-		network.moveNode(node, x, y);
+		useNetworkStore.getState().moveNode(node, x, y);
 	};
 
 	const handleClick = () => {
@@ -98,10 +103,10 @@ const Node = ({ node }: NodeProps) => {
 		<>
 			<Circle
 				key={`${node.name}-circle`}
-				x={node.x} y={node.y}
+				x={x} y={y}
 				radius={0.16}
-				fill={node.metadata.color}
-				stroke={pendingConnectionFrom === node ? '#f59e0b' : node.is_start ? '#ffffff' : node.is_end ? '#ffffff' : undefined}
+				fill={color}
+				stroke={pendingConnectionFrom === node ? '#f59e0b' : isStart ? '#ffffff' : isEnd ? '#ffffff' : undefined}
 				strokeWidth={0.02}
 				scaleX={isHovered ? 1.1 : 1}
 				scaleY={isHovered ? 1.1 : 1}
@@ -135,9 +140,9 @@ const Node = ({ node }: NodeProps) => {
 			<Text
 				ref={textRef}
 				key={`${node.name}-text`}
-				x={node.x - 1} y={node.y + 0.27}
+				x={x - 1} y={y + 0.27}
 				width={2}
-				text={node.name}
+				text={name}
 				fontSize={0.15}
 				fontFamily={'Arial'}
 				fill={'#fff'}
