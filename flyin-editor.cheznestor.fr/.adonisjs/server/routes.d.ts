@@ -12,6 +12,7 @@ export type ScannedRoutes = {
     'session.create': { paramsTuple?: []; params?: {} }
     'projects.index': { paramsTuple?: []; params?: {} }
     'projects.store': { paramsTuple?: []; params?: {} }
+    'profile': { paramsTuple?: []; params?: {} }
     'projects.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'projects.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'projects.update-metadata': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
@@ -30,6 +31,7 @@ export type ScannedRoutes = {
     'intra.callback': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'projects.index': { paramsTuple?: []; params?: {} }
+    'profile': { paramsTuple?: []; params?: {} }
     'projects.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'admin.home': { paramsTuple?: []; params?: {} }
@@ -43,6 +45,7 @@ export type ScannedRoutes = {
     'intra.callback': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
     'projects.index': { paramsTuple?: []; params?: {} }
+    'profile': { paramsTuple?: []; params?: {} }
     'projects.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'admin.home': { paramsTuple?: []; params?: {} }

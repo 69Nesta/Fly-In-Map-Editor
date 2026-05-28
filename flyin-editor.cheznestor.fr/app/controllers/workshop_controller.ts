@@ -15,22 +15,26 @@ export default class WorkshopController {
 	}
 
 	async show({ auth, inertia, params }: HttpContext) {
-		const project = await Project.query()
-			.where('id', params.id)
-			.where('visibility', 'public')
-			.preload('user')
-			.firstOrFail()
+		try {
+			const project = await Project.query()
+				.where('id', params.id)
+				.where('visibility', 'public')
+				.preload('user')
+				.firstOrFail()
 
-		const projects = await Project.query()
-			.where('visibility', 'public')
-			.preload('user')
-			.orderBy('updated_at', 'desc')
+			const projects = await Project.query()
+				.where('visibility', 'public')
+				.preload('user')
+				.orderBy('updated_at', 'desc')
 
-		return inertia.render('home', {
-			project: transformProject(project),
-			projects: transformProjects(projects),
-			readOnly: true,
-			canImport: Boolean(auth.user),
-		})
+			return inertia.render('home', {
+				project: transformProject(project),
+				projects: transformProjects(projects),
+				readOnly: true,
+				canImport: Boolean(auth.user),
+			})
+		} catch (error) {
+			return inertia.render('errors/not_found', {}, { status: 404 })
+		}
 	}
 }

@@ -95,3 +95,10 @@ export default function Home(props: HomeProps) {
 		</div>
 	);
 };
+
+import EmptyLayout from '~/layouts/empty';
+import { ReactElement } from 'react';
+
+Home.layout = function (page: ReactElement<HomeProps>) {
+	return <EmptyLayout>{page}</EmptyLayout>
+}

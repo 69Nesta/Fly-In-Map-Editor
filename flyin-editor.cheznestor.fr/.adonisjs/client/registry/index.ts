@@ -54,6 +54,12 @@ const routes = {
     tokens: [{"old":"/projects","type":0,"val":"projects","end":""}],
     types: placeholder as Registry['projects.store']['types'],
   },
+  'profile': {
+    methods: ["GET","HEAD"],
+    pattern: '/profile',
+    tokens: [{"old":"/profile","type":0,"val":"profile","end":""}],
+    types: placeholder as Registry['profile']['types'],
+  },
   'projects.show': {
     methods: ["GET","HEAD"],
     pattern: '/projects/:id',

@@ -23,6 +23,7 @@ export interface ApiDefinition {
     updateMetadata: typeof routes['projects.update-metadata']
     destroy: typeof routes['projects.destroy']
   }
+  profile: typeof routes['profile']
   logout: typeof routes['logout']
   admin: {
     home: typeof routes['admin.home']

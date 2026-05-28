@@ -42,6 +42,7 @@ router
 	.group(() => {
 		router.get('/projects', [ProjectsController, 'index']).as('projects.index')
 		router.post('/projects', [ProjectsController, 'store']).as('projects.store')
+		router.get('/profile', ({ inertia }) => inertia.render('profile', {})).as('profile')
 
 		router.get('/projects/:id', [ProjectsController, 'show']).as('projects.show')
 		router.put('/projects/:id', [ProjectsController, 'update']).as('projects.update')

@@ -103,6 +103,18 @@ export interface Registry {
       errorResponse: unknown
     }
   }
+  'profile': {
+    methods: ["GET","HEAD"]
+    pattern: '/profile'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
   'projects.show': {
     methods: ["GET","HEAD"]
     pattern: '/projects/:id'

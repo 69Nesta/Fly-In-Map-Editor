@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { IconFolderCode, IconDots, IconEdit, IconTrash } from '@tabler/icons-react';
+import { IconFolderCode, IconEdit, IconTrash } from '@tabler/icons-react';
 import { type RefObject, useEffect, useMemo, useRef, useState } from 'react';
 import { router } from '@inertiajs/react';
 
@@ -39,9 +39,7 @@ import {
 	TableHeader,
 	TableRow,
 } from '~/components/ui/table';
-import { MapLoader } from '~/context/map_loader';
 import { useEditorStore } from '~/store/editor_store';
-import { useNetworkStore } from '~/store/network_store';
 import { ProjectSummary, ProjectVisibility } from '~/types/project_summary';
 import { Pen } from 'lucide-react';
 
@@ -464,23 +462,28 @@ export function ProjectModal() {
 					</Card>
 				)}
 
-				<DialogFooter className='gap-2'>
+				<DialogFooter className='gap-2 flex-wrap justify-between sm:justify-between'>
 					<Button variant='outline' onClick={close}>
 						Cancel
 					</Button>
-					{isConnected ? (
-						<>
-							{activeTab === 'open' ? (
-								<Button variant='default' onClick={() => setActiveTab('create')}>Create new project</Button>
-							) : null}
-							{activeTab === 'create' ? <Button onClick={handleCreateProject}>Start editing</Button> : null}
-							{activeTab === 'import' ? <Button onClick={handleImportProject}>Import and edit</Button> : null}
-						</>
-					) : (
-						<Button asChild>
-							<Link href='/login'>Login with intra</Link>
-						</Button>
-					)}
+					<div className='gap-2 flex flex-wrap'>
+						{isConnected ? (
+							<>
+								{activeTab === 'open' || activeTab === 'import' ? (
+									<Button variant='outline' asChild><Link href={'/workshop'}>Open Workshop</Link></Button>
+								) : null}
+								{activeTab === 'open' ? (
+									<Button variant='default' onClick={() => setActiveTab('create')}>Create new project</Button>
+								) : null}
+								{activeTab === 'create' ? <Button onClick={handleCreateProject}>Start editing</Button> : null}
+								{activeTab === 'import' ? <Button onClick={handleImportProject}>Import and edit</Button> : null}
+							</>
+						) : (
+							<Button asChild>
+								<Link href='/login'>Login with intra</Link>
+							</Button>
+						)}
+					</div>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
