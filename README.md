@@ -163,22 +163,6 @@ npm run lint:fix
 - **Canvas Interactions** — Keyboard and mouse handlers in `src/components/editor/hook/`
 - **Styling** — Tailwind CSS with responsive design patterns
 
-## cPanel Deployment
-
-This repository includes a GitHub Actions workflow that deploys automatically on pushes to `main`.
-
-Required GitHub Secrets:
-
-- `CPANEL_SSH_HOST` - cPanel server host name or IP
-- `CPANEL_SSH_PORT` - SSH port used by the server
-- `CPANEL_SSH_USER` - SSH user for deployment
-- `CPANEL_SSH_KEY` - unencrypted private key with access to the deployment account; store it with real line breaks, or as a single line with `\n` escape sequences if your secret editor strips newlines
-- `CPANEL_DEPLOY_PATH` - absolute path to the app directory on cPanel
-
-The workflow validates the app with `npm run lint`, `npm run typecheck`, and `npm run build`, then syncs the production bundle into `${CPANEL_DEPLOY_PATH}/build`.
-
-On the server, the Node app should be configured to start from the built app inside the `build` directory. The deploy step also runs `node ace migration:run --force` and touches `tmp/restart.txt` to restart the cPanel Passenger app.
-
 ## Keyboard Shortcuts
 
 | Shortcut | Action |
