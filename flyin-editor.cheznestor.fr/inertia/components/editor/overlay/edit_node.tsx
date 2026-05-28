@@ -94,6 +94,17 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 		return false;
 	};
 
+	const commitName = (nextName: string): boolean => {
+		if (nextName.trim() === '')
+			return false;
+
+		if (nodes.some((n) => n.name === nextName))
+			return false;
+
+		changeNodeName(selectedNodeInStore, nextName);
+		return true;
+	}
+
 	const nodeKind = selectedNodeInStore.is_start
 		? 'Start hub'
 		: selectedNodeInStore.is_end
@@ -117,7 +128,7 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 						onChange={(event) => {
 							const nextName = event.target.value;
 							setName(nextName);
-							changeNodeName(selectedNodeInStore, nextName);
+							commitName(nextName);
 						}}
 					/>
 				</div>
@@ -166,8 +177,8 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 							<SelectValue placeholder='Choose color' />
 						</SelectTrigger>
 						<SelectContent>
-							{colorOptions.map((option) => (
-								<SelectItem key={option} value={option}>
+							{colorOptions.map((option, index) => (
+								<SelectItem key={`color-${option}-${index}`} value={option}>
 									<div className='w-2 h-2 rounded-full' style={{ background: option }} /> {option}
 								</SelectItem>
 							))}
@@ -206,8 +217,8 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 								<SelectValue placeholder='Zone type' />
 							</SelectTrigger>
 							<SelectContent>
-								{zoneOptions.map((option) => (
-									<SelectItem key={option} value={option}>
+								{zoneOptions.map((option, index) => (
+									<SelectItem key={`zone-${option}-${index}`} value={option}>
 										{option}
 									</SelectItem>
 								))}
@@ -253,11 +264,8 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 				</div>
 				<div>
 					<Button variant='destructive' onClick={() => {
-						if (window.confirm('Are you sure you want to delete this node? This will also delete all connections linked to this node.'))
-						{
-							useNetworkStore.getState().removeNode(selectedNodeInStore);
-							useEditorStore.getState().setCurrentSelectedElement(null);
-						}
+						useNetworkStore.getState().removeNode(selectedNodeInStore);
+						useEditorStore.getState().setCurrentSelectedElement(null);
 					}}>
 						<Trash2 />Delete node
 					</Button>

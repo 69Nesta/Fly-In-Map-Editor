@@ -100,8 +100,8 @@ export function EditConnectionCardContent({ selectedConnection }: EditConnection
 							<SelectValue placeholder='Choose node' />
 						</SelectTrigger>
 						<SelectContent>
-							{endpointOptions.map((node) => (
-								<SelectItem key={node.name} value={node.name}>
+							{endpointOptions.map((node, index) => (
+								<SelectItem key={`node-${node.name}-${index}`} value={node.name}>
 									{node.name}
 								</SelectItem>
 							))}
@@ -122,8 +122,8 @@ export function EditConnectionCardContent({ selectedConnection }: EditConnection
 							<SelectValue placeholder='Choose node' />
 						</SelectTrigger>
 						<SelectContent>
-							{endpointOptions.map((node) => (
-								<SelectItem key={node.name} value={node.name}>
+							{endpointOptions.map((node, index) => (
+								<SelectItem key={`node-${node.name}-${index}`} value={node.name}>
 									{node.name}
 								</SelectItem>
 							))}

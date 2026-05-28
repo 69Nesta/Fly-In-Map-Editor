@@ -6,8 +6,8 @@ export function NodesLayer() {
 	const network = useNetworkStore();
 
 	return <Layer>
-		{network.nodes.map(node =>
-			<Node key={node.name} node={node} />
+		{network.nodes.map((node, index) =>
+			<Node key={`node-${node.name}-${index}`} node={node} />
 		)}
 	</Layer>
 }

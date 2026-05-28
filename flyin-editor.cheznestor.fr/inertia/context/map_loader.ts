@@ -97,8 +97,7 @@ class MapLoader {
 							line_number,
 							message: `Duplicate node name "${node.name}". Node names must be unique.`
 						});
-					}
-					else if (node.is_start && this.data.nodes.some(n => n.x === node.x && n.y === node.y)) {
+					} else if (node.is_start && this.data.nodes.some(n => n.x === node.x && n.y === node.y)) {
 						this.data.errors.push({
 							line,
 							line_number,

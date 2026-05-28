@@ -74,6 +74,7 @@ export function ProjectModal() {
 
 	const projectModalOpen = useEditorStore((state) => state.projectModalOpen);
 	const setProjectModalOpen = useEditorStore((state) => state.setProjectModalOpen);
+	const setCurrentProjectName = useEditorStore((state) => state.setCurrentProjectName);
 	const network = useNetworkStore();
 
 	const importRef: RefObject<HTMLTextAreaElement | null> = useRef<HTMLTextAreaElement | null>(null);
@@ -88,6 +89,7 @@ export function ProjectModal() {
 			return;
 		console.log('Loading project content into the editor');
 		console.log(project.content);
+		setCurrentProjectName(project.name);
 
 		const lines: string[] = project.content.split('\n');
 		const mapLoader = new MapLoader(lines);
@@ -151,6 +153,7 @@ export function ProjectModal() {
 		}, {
 			preserveScroll: true,
 			onSuccess: () => {
+				setCurrentProjectName(guestDraft.name.trim() || 'New project');
 				clearGuestDraft();
 				close();
 			},

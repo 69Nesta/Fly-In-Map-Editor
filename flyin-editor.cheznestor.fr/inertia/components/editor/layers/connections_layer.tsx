@@ -7,8 +7,8 @@ export function ConnectionsLayer() {
 	const connections = useNetworkStore((s) => s.connections);
 	
 	return <Layer>
-		{connections.map((connection) => (
-			<Connection key={connection.id} connection={connection} />
+		{connections.map((connection, index) => (
+			<Connection key={`connection-${connection.id}-${index}`} connection={connection} />
 		))}
 	</Layer>
 }
