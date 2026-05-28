@@ -1,13 +1,10 @@
 import { useEditorStore } from '~/store/editor_store'
 import { Button } from '~/components/ui/button'
-import { Home, Loader2, Save, LogIn, Rocket } from 'lucide-react'
+import { Home, LogIn, Rocket } from 'lucide-react'
 import { router, usePage } from '@inertiajs/react'
 import { ProjectSummary } from '~/types/project_summary';
 
 type ActionTopLeftProps = {
-	onForceSave: () => void;
-	isSaving: boolean;
-	canForceSave: boolean;
 	canImport?: boolean;
 };
 
@@ -22,7 +19,7 @@ type PageProps = {
 	user?: { id: string } | null;
 };
 
-export function ActionTopLeft({ onForceSave, isSaving, canForceSave, canImport = false }: ActionTopLeftProps) {
+export function ActionTopLeft({ canImport = false }: ActionTopLeftProps) {
 	const page = usePage<PageProps>();
 	const setProjectModalOpen = useEditorStore((state) => state.setProjectModalOpen)
 	const currentProjectName = useEditorStore((state) => state.currentProjectName)
@@ -78,19 +75,6 @@ export function ActionTopLeft({ onForceSave, isSaving, canForceSave, canImport =
 				<span className='max-w-40 text-gray-500 truncate'>&gt;</span>
 				<span className='max-w-40 truncate'>{readOnly ? (isConnected ? 'Import to edit' : 'Sign in to import') : label}</span>
 			</Button>
-			{!readOnly && canForceSave ? (
-				<Button
-					variant='outline'
-					size='default'
-					className='gap-2 rounded-xl px-3'
-					onClick={onForceSave}
-					disabled={isSaving}
-					aria-label='Save project'
-				>
-					{isSaving ? <Loader2 className='animate-spin' /> : <Save />}
-					<span>Save</span>
-				</Button>
-			) : null}
 		</div>
 	)
 }

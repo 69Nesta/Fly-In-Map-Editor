@@ -19,7 +19,7 @@ import { RightPanel } from '~/components/right_panel/right_panel';
 import { useAutosave } from '~/hooks/use_autosave';
 import type { InertiaProps } from '~/types';
 import { ProjectSummary } from '~/types/project_summary';
-import { About } from '~/components/about/about';
+import { ActionBottomLeft } from '~/components/action_bottom_left';
 
 type HomeProps = InertiaProps<{
 	project?: ProjectSummary | null;
@@ -63,8 +63,8 @@ export default function Home(props: HomeProps) {
 						<EditorCanvas parent={editorBoxRef} />
 
 						<CurrentSelectedElement />
-						<ActionTopLeft onForceSave={forceSave} isSaving={isSaving} canForceSave={Boolean(project)} canImport={canImport} />
-						<About />
+						<ActionTopLeft canImport={canImport} />
+						<ActionBottomLeft onForceSave={forceSave} isSaving={isSaving} canForceSave={Boolean(project)}/>
 						<ToolBar />
 						{!isReadOnly ? <ProjectModal /> : null}
 						{!isRightPanelVisible && (

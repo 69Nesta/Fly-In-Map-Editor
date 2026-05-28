@@ -5,10 +5,11 @@ import { Card } from '~/components/ui/card'
 
 
 type ToolBarProps = {
-	readOnly?: boolean;
 };
 
-export function ToolBar({ readOnly = false }: ToolBarProps) {
+export function ToolBar({ }: ToolBarProps) {
+	const readOnly = useEditorStore((s) => s.readOnly);
+
 	if (readOnly)
 		return null;
 
