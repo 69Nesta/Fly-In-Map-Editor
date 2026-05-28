@@ -40,22 +40,22 @@ jobs:
       - name: Prepare deploy bundle
         working-directory: flyin-editor.cheznestor.fr
         run: |
-          rm -rf ../deploy
-          mkdir -p ../deploy
+          rm -rf ../build
+          mkdir -p ../build
           rsync -a --delete \
             --exclude '.git' \
             --exclude '.github' \
             --exclude 'node_modules' \
             --exclude 'tests' \
             --exclude '.vscode' \
-            build/ ../deploy/
-          cp package.json package-lock.json ../deploy/
+            build/ ../build/
+          cp package.json package-lock.json ../build/
 
       - name: Upload deploy bundle
         uses: actions/upload-artifact@v4
         with:
           name: deploy-bundle
-          path: flyin-editor.cheznestor.fr/deploy
+          path: flyin-editor.cheznestor.fr/build
           if-no-files-found: error
           retention-days: 1
 
@@ -69,7 +69,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: deploy-bundle
-          path: deploy
+          path: build
 
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.9.0
@@ -87,7 +87,7 @@ jobs:
             "mkdir -p '${{ secrets.CPANEL_DEPLOY_PATH }}/build'"
           rsync -az --delete \
             -e "ssh -p ${{ secrets.CPANEL_SSH_PORT }}" \
-            deploy/ \
+            build/ \
             "${{ secrets.CPANEL_SSH_USER }}@${{ secrets.CPANEL_SSH_HOST }}:${{ secrets.CPANEL_DEPLOY_PATH }}/build/"
 
       - name: Install dependencies, run migrations, and restart
