@@ -16,19 +16,6 @@ import router from '@adonisjs/core/services/router'
 import { HttpContext } from '@adonisjs/core/http'
 import { transformProjects } from '#transformers/project_transformer'
 
-// type ProjectSummary = {
-// 	id: string;
-// 	userId: string;
-// 	name: string;
-// 	description: string | null;
-// 	visibility: 'private' | 'public';
-// 	content: string;
-// 	thumbnailUrl: string | null;
-// 	createdAt: string | null;
-// 	updatedAt: string | null;
-// }
-
-// const serializeProject = (project: Awaited<ReturnType<typeof ProjectTransformer.transform>>) => ProjectTransformer.transform(project as never) as unknown as ProjectSummary
 
 router.get('/', async ({ auth, inertia }: HttpContext) => {
 	const projects = auth.user ? await auth.user.related('projects').query().orderBy('updated_at', 'desc') : []
@@ -40,14 +27,13 @@ router.get('/', async ({ auth, inertia }: HttpContext) => {
 
 router
 	.group(() => {
-		
 		router.get('oauth/intra/redirect', [IntraAuthController, 'redirect']).as('intra.redirect')
 		router.get('oauth/intra/callback', [IntraAuthController, 'callback']).as('intra.callback')
-		
+
 		router.get('login', [controllers.Session, 'create'])
 	})
 	.use(middleware.guest())
-	
+
 	router
 	.group(() => {
 		router.get('/projects', [ProjectsController, 'index']).as('projects.index')
@@ -55,6 +41,8 @@ router
 
 		router.get('/projects/:id', [ProjectsController, 'show']).as('projects.show')
 		router.put('/projects/:id', [ProjectsController, 'update']).as('projects.update')
+		router.patch('/projects/:id', [ProjectsController, 'update_metadata']).as('projects.update-metadata')
+		router.delete('/projects/:id', [ProjectsController, 'destroy']).as('projects.destroy')
 
 		router.post('logout', [controllers.Session, 'destroy']).as('logout')
 		router.get('logout', [controllers.Session, 'destroy'])

@@ -1,8 +1,8 @@
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class SessionController {
-	async create({ inertia }: HttpContext) {
-		return inertia.render('auth/login', {})
+	async create({ response }: HttpContext) {
+		return response.redirect().toRoute('intra.redirect')
 	}
 
 	async destroy({ auth, response }: HttpContext) {

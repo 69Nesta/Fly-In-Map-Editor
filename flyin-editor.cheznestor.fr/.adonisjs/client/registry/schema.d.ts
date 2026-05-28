@@ -103,6 +103,30 @@ export interface Registry {
       errorResponse: unknown
     }
   }
+  'projects.update-metadata': {
+    methods: ["PATCH"]
+    pattern: '/projects/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'projects.destroy': {
+    methods: ["DELETE"]
+    pattern: '/projects/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
   'logout': {
     methods: ["POST"]
     pattern: '/logout'

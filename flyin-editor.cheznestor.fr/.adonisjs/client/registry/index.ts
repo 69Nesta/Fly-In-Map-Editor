@@ -54,6 +54,18 @@ const routes = {
     tokens: [{"old":"/projects/:id","type":0,"val":"projects","end":""},{"old":"/projects/:id","type":1,"val":"id","end":""}],
     types: placeholder as Registry['projects.update']['types'],
   },
+  'projects.update-metadata': {
+    methods: ["PATCH"],
+    pattern: '/projects/:id',
+    tokens: [{"old":"/projects/:id","type":0,"val":"projects","end":""},{"old":"/projects/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['projects.update-metadata']['types'],
+  },
+  'projects.destroy': {
+    methods: ["DELETE"],
+    pattern: '/projects/:id',
+    tokens: [{"old":"/projects/:id","type":0,"val":"projects","end":""},{"old":"/projects/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['projects.destroy']['types'],
+  },
   'logout': {
     methods: ["POST"],
     pattern: '/logout',

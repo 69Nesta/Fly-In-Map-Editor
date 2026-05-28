@@ -12,6 +12,8 @@ export type ScannedRoutes = {
     'projects.store': { paramsTuple?: []; params?: {} }
     'projects.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'projects.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'projects.update-metadata': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+    'projects.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'logout': { paramsTuple?: []; params?: {} }
     'session.destroy': { paramsTuple?: []; params?: {} }
     'admin.home': { paramsTuple?: []; params?: {} }
@@ -47,6 +49,12 @@ export type ScannedRoutes = {
   PUT: {
     'projects.update': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'admin.users.updateAdmin': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+  }
+  PATCH: {
+    'projects.update-metadata': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
+  }
+  DELETE: {
+    'projects.destroy': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
   }
 }
 declare module '@adonisjs/core/types/http' {

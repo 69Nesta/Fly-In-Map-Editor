@@ -16,6 +16,7 @@ import { RightPanel } from '~/components/right_panel/right_panel';
 import { useAutosave } from '~/hooks/use_autosave';
 import type { InertiaProps } from '~/types';
 import { ProjectSummary } from '~/types/project_summary';
+import { About } from '~/components/about/about';
 
 type HomeProps = InertiaProps<{
 	project?: ProjectSummary | null;
@@ -38,6 +39,7 @@ export default function Home(props: HomeProps) {
 
 						<CurrentSelectedElement />
 						<ActionTopLeft onForceSave={forceSave} isSaving={isSaving} canForceSave={Boolean(project)} />
+						<About />
 						<ToolBar />
 						<ProjectModal />
 						{!isRightPanelVisible && (

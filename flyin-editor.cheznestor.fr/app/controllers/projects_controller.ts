@@ -52,12 +52,32 @@ export default class ProjectsController {
 		project.name = payload.name
 		project.description = payload.description
 		project.visibility = payload.visibility
-		project.content = payload.content
+		if (payload.content)
+			project.content = payload.content
+
 		await project.save()
 
 		if (!isAutosave)
 			session.flash('success', `Project ${project.name} saved`)
+
 		return response.redirect().toRoute('projects.show', { id: project.id })
+	}
+
+	async update_metadata({ auth, params, session, request, response }: HttpContext) {
+		const payload = await request.validateUsing(projectFormValidator)
+		const project = await Project.query()
+			.where('id', params.id)
+			.where('user_id', auth.user!.id)
+			.firstOrFail()
+
+		project.name = payload.name
+		project.description = payload.description
+		project.visibility = payload.visibility
+
+		await project.save()
+		session.flash('success', `Project ${project.name} saved`)
+
+		return response.redirect().toRoute('home')
 	}
 
 	async show({ auth, inertia, params }: HttpContext) {
@@ -74,5 +94,18 @@ export default class ProjectsController {
 			project: transformProject(project),
 			projects: transformProjects(projects),
 		})
+	}
+
+	async destroy({ auth, params, response, session }: HttpContext) {
+		const project = await Project.query()
+			.where('id', params.id)
+			.where('user_id', auth.user!.id)
+			.firstOrFail()
+
+		const projectName = project.name
+		await project.delete()
+
+		session.flash('success', `Project ${projectName} deleted`)
+		return response.redirect().toRoute('home')
 	}
 }

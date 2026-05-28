@@ -16,6 +16,8 @@ export interface ApiDefinition {
     store: typeof routes['projects.store']
     show: typeof routes['projects.show']
     update: typeof routes['projects.update']
+    updateMetadata: typeof routes['projects.update-metadata']
+    destroy: typeof routes['projects.destroy']
   }
   logout: typeof routes['logout']
   admin: {
