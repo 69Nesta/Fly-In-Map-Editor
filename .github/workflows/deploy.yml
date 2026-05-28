@@ -72,9 +72,17 @@ jobs:
           path: build
 
       - name: Setup SSH agent
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.CPANEL_SSH_KEY }}
+        env:
+          CPANEL_SSH_KEY: ${{ secrets.CPANEL_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          key_file="$HOME/.ssh/cpanel_deploy_key"
+          printf '%s' "$CPANEL_SSH_KEY" | tr -d '\r' | sed 's/\\n/\n/g' > "$key_file"
+          chmod 600 "$key_file"
+          eval "$(ssh-agent -s)"
+          echo "SSH_AUTH_SOCK=$SSH_AUTH_SOCK" >> "$GITHUB_ENV"
+          echo "SSH_AGENT_PID=$SSH_AGENT_PID" >> "$GITHUB_ENV"
+          ssh-add "$key_file"
 
       - name: Trust the cPanel host
         run: |
