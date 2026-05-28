@@ -47,7 +47,9 @@ export default class ProjectsController {
 		const project = await Project.query()
 			.where('id', params.id)
 			.where('user_id', auth.user!.id)
-			.firstOrFail()
+			.first()
+		if (!project)
+			return response.status(404).send({ message: 'Project not found' })
 
 		project.name = payload.name
 		project.description = payload.description
@@ -63,12 +65,15 @@ export default class ProjectsController {
 		return response.redirect().toRoute('projects.show', { id: project.id })
 	}
 
-	async update_metadata({ auth, params, session, request, response }: HttpContext) {
+	async update_metadata({ auth, params, session, request, response, inertia }: HttpContext) {
 		const payload = await request.validateUsing(projectFormValidator)
 		const project = await Project.query()
 			.where('id', params.id)
 			.where('user_id', auth.user!.id)
-			.firstOrFail()
+			.first()
+
+		if (!project)
+			return inertia.render('errors/not_found', {})
 
 		project.name = payload.name
 		project.description = payload.description
@@ -86,7 +91,9 @@ export default class ProjectsController {
 			.where((query) => {
 				query.where('user_id', auth.user!.id).orWhere('visibility', 'public')
 			})
-			.firstOrFail()
+			.first()
+		if (!project)
+			return inertia.render('errors/not_found', {})
 
 		const projects = await auth.user!.related('projects').query().orderBy('updated_at', 'desc')
 

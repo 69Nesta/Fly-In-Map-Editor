@@ -18,7 +18,7 @@ import AdminLayout from '~/layouts/admin'
 import { DateTime } from 'luxon'
 
 type AdminUser = {
-	id: number
+	id: string
 	login: string
 	email: string | null
 	firstName: string | null
@@ -42,7 +42,7 @@ type AdminUsersPageProps = InertiaProps<{
 }>
 
 function AdminUsersPage({ users, meta }: AdminUsersPageProps) {
-	const [processingUserId, setProcessingUserId] = useState<number | null>(null)
+	const [processingUserId, setProcessingUserId] = useState<string | null>(null)
 
 	const updateAdmin = (user: AdminUser) => {
 		setProcessingUserId(user.id)

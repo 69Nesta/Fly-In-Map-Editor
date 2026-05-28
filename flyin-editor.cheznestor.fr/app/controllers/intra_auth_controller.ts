@@ -1,17 +1,6 @@
 import User from '#models/user'
 import type { HttpContext } from '@adonisjs/core/http'
-// import hash from '@adonisjs/core/services/hash'
 
-// type IntraProfile = {
-// 	id: string,
-// 	login: string,
-// 	name: string,
-// 	email: string,
-// 	emailVerificationState: 'verified' | 'unsupported',
-// 	avatarUrl: string | null,
-// 	token: { token: string, type: 'bearer' },
-// 	original: JSON,
-// }
 
 export default class IntraAuthController {
 	async redirect({ ally }: HttpContext) {
