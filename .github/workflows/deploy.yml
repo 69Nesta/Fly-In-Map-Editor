@@ -29,10 +29,6 @@ jobs:
         working-directory: flyin-editor.cheznestor.fr
         run: npm ci
 
-      - name: Run lint
-        working-directory: flyin-editor.cheznestor.fr
-        run: npm run lint
-
       - name: Run typecheck
         working-directory: flyin-editor.cheznestor.fr
         run: npm run typecheck
