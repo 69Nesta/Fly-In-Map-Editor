@@ -3,6 +3,7 @@ import type Project from '#models/project'
 type ProjectSummary = {
 	id: string;
 	userId: string;
+	ownerLogin: string | null;
 	name: string;
 	description: string | null;
 	content: string;
@@ -16,6 +17,7 @@ export function transformProject(project: Project): ProjectSummary {
 	return {
 		id: project.id,
 		userId: project.userId,
+		ownerLogin: project.user?.login ?? null,
 		name: project.name,
 		description: project.description,
 		content: project.content,

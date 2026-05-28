@@ -25,8 +25,12 @@ const Node = ({ node }: NodeProps) => {
 
 	const setCurrentCursorType = useEditorStore((s) => s.setCurrentCursorType);
 	const resetCursorType = useEditorStore((s) => s.resetCursorType);
+	const readOnly = useEditorStore((s) => s.readOnly);
 
 	const handleDragMove = (e: Konva.KonvaEventObject<DragEvent>) => {
+		if (readOnly)
+			return;
+
 		const element = e.target;
 		if (currentTool !== 'select')
 		{
@@ -50,12 +54,15 @@ const Node = ({ node }: NodeProps) => {
 	};
 
 	const handleClick = () => {
+		if (readOnly)
+			return;
+
 		if (currentTool === 'select' || currentTool === 'node') {
 			setCurrentSelectedElement(node);
 			return;
 		}
 
-		if (currentTool === 'connection') {
+		if (currentTool === 'connection' && !readOnly) {
 			const pending = useEditorStore.getState().pendingConnectionFrom;
 			const setPending = useEditorStore.getState().setPendingConnectionFrom;
 
@@ -98,8 +105,7 @@ const Node = ({ node }: NodeProps) => {
 				strokeWidth={0.02}
 				scaleX={isHovered ? 1.1 : 1}
 				scaleY={isHovered ? 1.1 : 1}
-				draggable={currentTool === 'select'}
-				perfectDrawEnabled
+				draggable={!readOnly && currentTool === 'select'}
 				shadowColor='rgba(0,0,0,0.15)'
 				shadowBlur={10}
 				shadowOffsetY={4}
@@ -113,8 +119,18 @@ const Node = ({ node }: NodeProps) => {
 					resetCursorType();
 					if (currentSelectedElement !== node) setIsHovered(false);
 				}}
-				onDragStart={() => setCurrentCursorType('drag_node')}
-				onDragEnd={() => resetCursorType()}
+				onDragStart={() => {
+					if (readOnly)
+						return;
+
+					setCurrentCursorType('drag_node');
+				}}
+				onDragEnd={() => {
+					if (readOnly)
+						return;
+
+					resetCursorType();
+				}}
 			/>
 			<Text
 				ref={textRef}

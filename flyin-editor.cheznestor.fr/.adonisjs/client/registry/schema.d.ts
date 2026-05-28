@@ -19,6 +19,30 @@ export interface Registry {
       errorResponse: unknown
     }
   }
+  'workshop.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/workshop'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
+  'workshop.show': {
+    methods: ["GET","HEAD"]
+    pattern: '/workshop/:id'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: unknown
+      errorResponse: unknown
+    }
+  }
   'intra.redirect': {
     methods: ["GET","HEAD"]
     pattern: '/oauth/intra/redirect'

@@ -7,12 +7,13 @@ import { type ProjectSummary } from '~/types/project_summary';
 type UseAutosaveOptions = {
 	project: ProjectSummary | null;
 	delay?: number;
+	enabled?: boolean;
 };
 
 const defaultDelay = 800;
 const animationDuration = 100;
 
-export function useAutosave({ project, delay = defaultDelay }: UseAutosaveOptions) {
+export function useAutosave({ project, delay = defaultDelay, enabled = true }: UseAutosaveOptions) {
 	// const exportCode = useNetworkStore((state) => state.export().join('\n'));
 	const exportCode = useNetworkStore((state) => state.export_cache.join('\n'));
 	const [isSaving, setIsSaving] = useState(false);
@@ -79,6 +80,9 @@ export function useAutosave({ project, delay = defaultDelay }: UseAutosaveOption
 	}, [project?.content, project?.id]);
 
 	useEffect(() => {
+		if (!enabled)
+			return;
+
 		if (!project)
 			return;
 
@@ -101,7 +105,7 @@ export function useAutosave({ project, delay = defaultDelay }: UseAutosaveOption
 				timeoutRef.current = null;
 			}
 		};
-	}, [delay, exportCode, flushPending, project, project?.content]);
+	}, [delay, enabled, exportCode, flushPending, project, project?.content]);
 
 	const forceSave = useCallback(() => {
 		if (!project)

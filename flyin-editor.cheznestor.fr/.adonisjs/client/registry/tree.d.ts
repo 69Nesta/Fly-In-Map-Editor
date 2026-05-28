@@ -3,6 +3,10 @@ import type { routes } from './index.ts'
 
 export interface ApiDefinition {
   home: typeof routes['home']
+  workshop: {
+    index: typeof routes['workshop.index']
+    show: typeof routes['workshop.show']
+  }
   intra: {
     redirect: typeof routes['intra.redirect']
     callback: typeof routes['intra.callback']

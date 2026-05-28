@@ -4,6 +4,9 @@ import { handleUnselectElement } from "./handle_unselect_element"
 
 
 export const keydownHook = (e: KeyboardEvent, editorStore: EditorStore) => {
+	if (editorStore.readOnly)
+		return
+
 	handleDelete(e)
 
 	if (e.key === 'Escape')

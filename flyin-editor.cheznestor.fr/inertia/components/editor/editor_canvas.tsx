@@ -30,6 +30,7 @@ export function EditorCanvas({ parent }: EditorCanvasProps) {
 	const networkStore = useNetworkStore();
 	const editorStore = useEditorStore();
 	const currentCursorType = useEditorStore((s) => s.currentCursorType);
+	// const readOnly = useEditorStore((s) => s.readOnly);
 
 	useEffect(() => {
 		const syncSize = () => {
@@ -107,6 +108,7 @@ export function EditorCanvas({ parent }: EditorCanvasProps) {
 			draggable
 			onWheel={handleWheel}
 			onClick={handleClick}
+			pixelRatio={Math.min(window.devicePixelRatio, 2)}
 		>
 			<MemoBackgroundLayer />
 

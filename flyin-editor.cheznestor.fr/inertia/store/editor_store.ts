@@ -1,7 +1,6 @@
 import type { Connection } from '~/context/connection';
 import type { Node } from '~/context/node';
 import { create } from 'zustand';
-import { ProjectSummary } from '~/types/project_summary';
 
 export type Tool =
 	| 'select'
@@ -22,6 +21,9 @@ export type EditorStore = {
 
 	currentProjectName: string | null;
 	setCurrentProjectName: (name: string | null) => void;
+
+	readOnly: boolean;
+	setReadOnly: (readOnly: boolean) => void;
 
 	currentTool: Tool;
 	setTool: (tool: Tool) => void;
@@ -47,6 +49,12 @@ export const useEditorStore = create<EditorStore>((set) => ({
 	setCurrentProjectName: (name: string | null) =>
 		set({
 			currentProjectName: name,
+		}),
+
+	readOnly: false,
+	setReadOnly: (readOnly) =>
+		set({
+			readOnly,
 		}),
 
 	currentTool: 'select',

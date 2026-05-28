@@ -4,7 +4,14 @@ import { Button } from '~/components/ui/button'
 import { Card } from '~/components/ui/card'
 
 
-export function ToolBar() {
+type ToolBarProps = {
+	readOnly?: boolean;
+};
+
+export function ToolBar({ readOnly = false }: ToolBarProps) {
+	if (readOnly)
+		return null;
+
 	const currentTool = useEditorStore((s) => s.currentTool);
 	const setTool = useEditorStore((s) => s.setTool);
 

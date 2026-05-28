@@ -12,6 +12,18 @@ const routes = {
     tokens: [{"old":"/","type":0,"val":"/","end":""}],
     types: placeholder as Registry['home']['types'],
   },
+  'workshop.index': {
+    methods: ["GET","HEAD"],
+    pattern: '/workshop',
+    tokens: [{"old":"/workshop","type":0,"val":"workshop","end":""}],
+    types: placeholder as Registry['workshop.index']['types'],
+  },
+  'workshop.show': {
+    methods: ["GET","HEAD"],
+    pattern: '/workshop/:id',
+    tokens: [{"old":"/workshop/:id","type":0,"val":"workshop","end":""},{"old":"/workshop/:id","type":1,"val":"id","end":""}],
+    types: placeholder as Registry['workshop.show']['types'],
+  },
   'intra.redirect': {
     methods: ["GET","HEAD"],
     pattern: '/oauth/intra/redirect',

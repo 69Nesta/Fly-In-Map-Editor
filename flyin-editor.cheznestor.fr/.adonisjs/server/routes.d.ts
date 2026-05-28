@@ -5,6 +5,8 @@ type ParamValue = string | number | bigint | boolean
 export type ScannedRoutes = {
   ALL: {
     'home': { paramsTuple?: []; params?: {} }
+    'workshop.index': { paramsTuple?: []; params?: {} }
+    'workshop.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'intra.redirect': { paramsTuple?: []; params?: {} }
     'intra.callback': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
@@ -22,6 +24,8 @@ export type ScannedRoutes = {
   }
   GET: {
     'home': { paramsTuple?: []; params?: {} }
+    'workshop.index': { paramsTuple?: []; params?: {} }
+    'workshop.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'intra.redirect': { paramsTuple?: []; params?: {} }
     'intra.callback': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }
@@ -33,6 +37,8 @@ export type ScannedRoutes = {
   }
   HEAD: {
     'home': { paramsTuple?: []; params?: {} }
+    'workshop.index': { paramsTuple?: []; params?: {} }
+    'workshop.show': { paramsTuple: [ParamValue]; params: {'id': ParamValue} }
     'intra.redirect': { paramsTuple?: []; params?: {} }
     'intra.callback': { paramsTuple?: []; params?: {} }
     'session.create': { paramsTuple?: []; params?: {} }

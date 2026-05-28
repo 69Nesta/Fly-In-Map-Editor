@@ -12,6 +12,7 @@ import { controllers } from '#generated/controllers'
 import IntraAuthController from '#controllers/intra_auth_controller'
 import AdminUsersController from '#controllers/admin/users_controller'
 import ProjectsController from '#controllers/projects_controller'
+import WorkshopController from '#controllers/workshop_controller'
 import router from '@adonisjs/core/services/router'
 import { HttpContext } from '@adonisjs/core/http'
 import { transformProjects } from '#transformers/project_transformer'
@@ -24,6 +25,9 @@ router.get('/', async ({ auth, inertia }: HttpContext) => {
 		projects: transformProjects(projects),
 	})
 }).as('home')
+
+router.get('/workshop', [WorkshopController, 'index']).as('workshop.index')
+router.get('/workshop/:id', [WorkshopController, 'show']).as('workshop.show')
 
 router
 	.group(() => {

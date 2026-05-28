@@ -7,6 +7,7 @@ import { router, usePage } from '@inertiajs/react';
 import { useNetworkStore } from '~/store/network_store';
 import { useClipboard } from '~/hooks/clipboard';
 import { ProjectSummary } from '~/types/project_summary';
+import { useEditorStore } from '~/store/editor_store';
 
 type PageProps = {
 	project?: ProjectSummary | null;
@@ -26,6 +27,7 @@ export function RightPanel({ onHide }: RightPanelProps) {
 	const [exportCode, setExportCode] = useState(() => useNetworkStore.getState().export().join('\n'));
 	const [isGenerating, setIsGenerating] = useState(false);
 	const [isCopying, setIsCopying] = useState(false);
+	const readOnly = useEditorStore((s) => s.readOnly);
 
 	useEffect(() => {
 		let cancelled = false;
@@ -97,7 +99,11 @@ export function RightPanel({ onHide }: RightPanelProps) {
 						min={1}
 						step={1}
 						value={nbDrones}
+						disabled={readOnly}
 						onChange={(event) => {
+							if (readOnly)
+								return;
+
 							const nextValue = Number.parseInt(event.target.value, 10);
 							if (Number.isNaN(nextValue))
 								return;
@@ -109,7 +115,11 @@ export function RightPanel({ onHide }: RightPanelProps) {
 							aria-label="Plus"
 							title="Plus"
 							size="icon-xs"
+							disabled={readOnly}
 							onClick={() => {
+								if (readOnly)
+									return;
+
 								setNbDrones(nbDrones + 1)
 							}}
 						>
@@ -119,7 +129,11 @@ export function RightPanel({ onHide }: RightPanelProps) {
 							aria-label="Minus"
 							title="Minus"
 							size="icon-xs"
+							disabled={readOnly}
 							onClick={() => {
+								if (readOnly)
+									return;
+
 								setNbDrones(Math.max(1, nbDrones - 1))
 							}}
 						>
@@ -136,7 +150,7 @@ export function RightPanel({ onHide }: RightPanelProps) {
 						<p className='text-xs text-muted-foreground'>Generated asynchronously to keep the editor responsive.</p>
 					</div>
 					<div className='flex gap-2'>
-						{project ? (
+						{project && !readOnly ? (
 							<Button variant='secondary' size='sm' onClick={handleSave} disabled={!exportCode}>
 								Save
 							</Button>

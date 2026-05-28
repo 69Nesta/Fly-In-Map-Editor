@@ -29,6 +29,7 @@ interface EditNodeCardContentProps {
 
 export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) {
 	const currentSelectedElement = useEditorStore((s) => s.currentSelectedElement);
+	const readOnly = useEditorStore((s) => s.readOnly);
 	const nodes = useNetworkStore((s) => s.nodes);
 	const changeNodeName = useNetworkStore((s) => s.changeNodeName);
 	const moveNode = useNetworkStore((s) => s.moveNode);
@@ -130,6 +131,7 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 							setName(nextName);
 							commitName(nextName);
 						}}
+						disabled={readOnly}
 					/>
 				</div>
 
@@ -146,6 +148,7 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 								if (!commitPosition(nextValue, yValue))
 									setXValue(String(selectedNodeInStore.x));
 							}}
+							disabled={readOnly}
 						/>
 					</div>
 					<div className='space-y-2'>
@@ -160,6 +163,7 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 								if (!commitPosition(xValue, nextValue))
 									setYValue(String(selectedNodeInStore.y));
 							}}
+							disabled={readOnly}
 						/>
 					</div>
 				</div>
@@ -202,6 +206,7 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 								if (Number.isFinite(parsedValue))
 									changeMaxDrones(selectedNodeInStore, Math.max(0, Math.round(parsedValue)));
 							}}
+							disabled={readOnly}
 						/>
 					</div>
 					<div className='space-y-2'>
@@ -212,6 +217,7 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 								setZoneType(nextZoneType);
 								changeZoneType(selectedNodeInStore, nextZoneType as EZoneType);
 							}}
+							disabled={readOnly}
 						>
 							<SelectTrigger id='node-zone-type' className='w-full'>
 								<SelectValue placeholder='Zone type' />
@@ -236,6 +242,7 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 							onClick={() => {
 								changeIsStart(selectedNodeInStore, false);
 							}}
+							disabled={readOnly}
 						>
 							Normal
 						</Button>
@@ -245,6 +252,7 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 							onClick={() => {
 								changeIsStart(selectedNodeInStore, true);
 							}}
+							disabled={readOnly}
 						>
 							Start
 						</Button>
@@ -254,6 +262,7 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 							onClick={() => {
 								changeIsEnd(selectedNodeInStore, true);
 							}}
+							disabled={readOnly}
 						>
 							End
 						</Button>
@@ -263,7 +272,7 @@ export function EditNodeCardContent({ selectedNode }: EditNodeCardContentProps) 
 					Note: start hubs are where drones take off from, end hubs are where drones deliver their packages. Normal nodes are just transit points. A node can't be both a start and an end hub at the same time.
 				</div>
 				<div>
-					<Button variant='destructive' onClick={() => {
+					<Button variant='destructive' disabled={readOnly} onClick={() => {
 						useNetworkStore.getState().removeNode(selectedNodeInStore);
 						useEditorStore.getState().setCurrentSelectedElement(null);
 					}}>

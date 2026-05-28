@@ -1,11 +1,14 @@
 import { CurrentSelectedElement } from '~/components/editor/overlay/current_selected_element';
 import { ActionTopLeft } from '~/components/action_top_left';
 import { ProjectModal } from '~/components/project_modal';
-import { useRef, useState, type RefObject } from 'react';
+import { useEffect, useRef, useState, type RefObject } from 'react';
 import { EditorCanvas } from '~/components/editor';
 import { ToolBar } from '~/components/editor/overlay/tool_bar';
 import { Button } from '~/components/ui/button';
 import { PanelRightOpen } from 'lucide-react';
+import { MapLoader } from '~/context/map_loader';
+import { useEditorStore } from '~/store/editor_store';
+import { useNetworkStore } from '~/store/network_store';
 
 import {
 	ResizableHandle,
@@ -21,14 +24,36 @@ import { About } from '~/components/about/about';
 type HomeProps = InertiaProps<{
 	project?: ProjectSummary | null;
 	projects?: ProjectSummary[];
+	readOnly?: boolean;
+	canImport?: boolean;
 }>
 
 export default function Home(props: HomeProps) {
 	const project = props.project ?? null;
+	// const isReadOnly = Boolean(props.readOnly);
+	const canImport = props.canImport ?? false;
 	const editorBoxRef: RefObject<HTMLDivElement | null> = useRef(null);
 	const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
+	const setReadOnly = useEditorStore((s) => s.setReadOnly);
+	const isReadOnly = useEditorStore((s) => s.readOnly);
 
-	const { forceSave, isSaving } = useAutosave({ project });
+	useEffect(() => {
+		if (props.readOnly)
+			setReadOnly(true);
+	}, [props.readOnly, setReadOnly])
+	const setCurrentProjectName = useEditorStore((state) => state.setCurrentProjectName);
+	const network = useNetworkStore();
+
+	const { forceSave, isSaving } = useAutosave({ project, enabled: !isReadOnly });
+
+	useEffect(() => {
+		if (!project?.content)
+			return;
+
+		setCurrentProjectName(project.name);
+		const mapLoader = new MapLoader(project.content.split('\n'));
+		network.import(mapLoader.data);
+	}, [project?.content, project?.id, project?.name, setCurrentProjectName]);
 
 	return (
 		<div className='flex w-screen h-screen'>
@@ -38,10 +63,10 @@ export default function Home(props: HomeProps) {
 						<EditorCanvas parent={editorBoxRef} />
 
 						<CurrentSelectedElement />
-						<ActionTopLeft onForceSave={forceSave} isSaving={isSaving} canForceSave={Boolean(project)} />
+						<ActionTopLeft onForceSave={forceSave} isSaving={isSaving} canForceSave={Boolean(project)} canImport={canImport} />
 						<About />
 						<ToolBar />
-						<ProjectModal />
+						{!isReadOnly ? <ProjectModal /> : null}
 						{!isRightPanelVisible && (
 							<Button
 								variant='outline'
@@ -57,7 +82,7 @@ export default function Home(props: HomeProps) {
 				{isRightPanelVisible && <ResizableHandle withHandle />}
 				{isRightPanelVisible && (
 					<ResizablePanel defaultSize={'24%'} maxSize={'40%'} minSize={'15%'}>
-						<RightPanel onHide={() => setIsRightPanelVisible(false)} />
+							<RightPanel onHide={() => setIsRightPanelVisible(false)} />
 					</ResizablePanel>
 				)}
 			</ResizablePanelGroup>

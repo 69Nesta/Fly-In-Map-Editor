@@ -110,19 +110,19 @@ export function ProjectModal() {
 
 	const close = () => setProjectModalOpen(false);
 
-	useEffect(() => {
-		if (!project?.content)
-			return;
-		console.log('Loading project content into the editor');
-		console.log(project.content);
-		setCurrentProjectName(project.name);
+	// useEffect(() => {
+	// 	if (!project?.content)
+	// 		return;
+	// 	console.log('Loading project content into the editor');
+	// 	console.log(project.content);
+	// 	setCurrentProjectName(project.name);
 
-		const lines: string[] = project.content.split('\n');
-		const mapLoader = new MapLoader(lines);
+	// 	const lines: string[] = project.content.split('\n');
+	// 	const mapLoader = new MapLoader(lines);
 
-		network.import(mapLoader.data);
-		setProjectModalOpen(false);
-	}, []);
+	// 	network.import(mapLoader.data);
+	// 	setProjectModalOpen(false);
+	// }, []);
 
 	useEffect(() => {
 		if (typeof window === 'undefined')

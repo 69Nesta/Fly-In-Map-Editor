@@ -27,6 +27,7 @@ export function EditConnectionCardContent({ selectedConnection }: EditConnection
 	const changeConnectionMaxLinkCapacity = useNetworkStore((s) => s.changeConnectionMaxLinkCapacity);
 
 	const setCurrentSelectedElement = useEditorStore((s) => s.setCurrentSelectedElement);
+	const readOnly = useEditorStore((s) => s.readOnly);
 	const removeConnection = useNetworkStore((s) => s.removeConnection);
 
 	const selectedConnectionInStore = useMemo(() => {
@@ -95,6 +96,7 @@ export function EditConnectionCardContent({ selectedConnection }: EditConnection
 							if (!commitEndpoints(nextNode1Name, node2Name))
 								setNode1Name(selectedConnectionInStore.node1.name);
 						}}
+						disabled={readOnly}
 					>
 						<SelectTrigger id='connection-node1' className='w-full'>
 							<SelectValue placeholder='Choose node' />
@@ -117,6 +119,7 @@ export function EditConnectionCardContent({ selectedConnection }: EditConnection
 							if (!commitEndpoints(node1Name, nextNode2Name))
 								setNode2Name(selectedConnectionInStore.node2.name);
 						}}
+						disabled={readOnly}
 					>
 						<SelectTrigger id='connection-node2' className='w-full'>
 							<SelectValue placeholder='Choose node' />
@@ -146,13 +149,14 @@ export function EditConnectionCardContent({ selectedConnection }: EditConnection
 						if (!commitMaxLinkCapacity(nextValue))
 							setMaxLinkCapacity(String(selectedConnectionInStore.metadata.max_link_capacity));
 					}}
+					disabled={readOnly}
 				/>
 			</div>
 			<div className='text-sm text-muted-foreground'>
 				Note: the max link capacity is the maximum number of drones that can be on this connection at the same time.
 			</div>
 			<div className='space-y-2'>
-				<Button variant='destructive' onClick={() => {
+				<Button variant='destructive' disabled={readOnly} onClick={() => {
 					removeConnection(selectedConnectionInStore);
 					setCurrentSelectedElement(null);
 				}}>
