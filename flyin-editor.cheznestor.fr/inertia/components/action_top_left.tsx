@@ -6,10 +6,9 @@ type ActionTopLeftProps = {
 	onForceSave: () => void;
 	isSaving: boolean;
 	canForceSave: boolean;
-	projectName?: string | null;
 };
 
-export function ActionTopLeft({ onForceSave, isSaving, canForceSave, projectName }: ActionTopLeftProps) {
+export function ActionTopLeft({ onForceSave, isSaving, canForceSave }: ActionTopLeftProps) {
 	const setProjectModalOpen = useEditorStore((state) => state.setProjectModalOpen)
 	const currentProjectName = useEditorStore((state) => state.currentProjectName)
 
