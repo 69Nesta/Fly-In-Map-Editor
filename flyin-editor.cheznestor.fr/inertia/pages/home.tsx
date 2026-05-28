@@ -35,7 +35,7 @@ export default function Home(props: HomeProps) {
 	const editorBoxRef: RefObject<HTMLDivElement | null> = useRef(null);
 	const [isRightPanelVisible, setIsRightPanelVisible] = useState(true);
 	const setReadOnly = useEditorStore((s) => s.setReadOnly);
-	const isReadOnly = useEditorStore((s) => s.readOnly);
+	// const isReadOnly = useEditorStore((s) => s.readOnly);
 
 	useEffect(() => {
 		if (readOnly)
@@ -47,7 +47,7 @@ export default function Home(props: HomeProps) {
 	const import_map = useNetworkStore((state) => state.import);
 	const clear_map = useNetworkStore((state) => state.clear);
 
-	const { forceSave, isSaving } = useAutosave({ project, enabled: !isReadOnly });
+	const { forceSave, isSaving } = useAutosave({ project, enabled: !readOnly });
 
 	useEffect(() => {
 		if (!project?.content)
@@ -73,7 +73,7 @@ export default function Home(props: HomeProps) {
 						<ActionTopLeft canImport={canImport} />
 						<ActionBottomLeft onForceSave={forceSave} isSaving={isSaving} canForceSave={Boolean(project)}/>
 						<ToolBar />
-						{!isReadOnly ? <ProjectModal /> : null}
+						{!readOnly ? <ProjectModal /> : null}
 						{!isRightPanelVisible && (
 							<Button
 								variant='outline'

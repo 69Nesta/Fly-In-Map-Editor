@@ -10,11 +10,11 @@ type ToolBarProps = {
 export function ToolBar({ }: ToolBarProps) {
 	const readOnly = useEditorStore((s) => s.readOnly);
 
-	if (readOnly)
-		return null;
-
 	const currentTool = useEditorStore((s) => s.currentTool);
 	const setTool = useEditorStore((s) => s.setTool);
+
+	if (readOnly)
+		return null;
 
 	return <>
 		<div className='absolute bottom-2 left-0 w-full flex justify-center'>
