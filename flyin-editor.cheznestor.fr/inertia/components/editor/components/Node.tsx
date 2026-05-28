@@ -1,0 +1,156 @@
+import { type Node as NodeContext } from '~/context/node';
+import { useNetworkStore } from '~/store/network_store';
+import { useEditorStore } from '~/store/editor_store';
+
+import { useRef, useState, useEffect } from 'react';
+import { Circle, Text } from 'react-konva';
+import type Konva from 'konva';
+import { Connection } from '~/context/connection';
+import { ConnectionMetadata } from '~/context/metadata/connection_metadata';
+
+
+interface NodeProps {
+	node: NodeContext;
+}
+
+
+const Node = ({ node }: NodeProps) => {
+	const x = useNetworkStore((state) => state.nodes.find((candidate) => candidate === node)?.x ?? node.x);
+	const y = useNetworkStore((state) => state.nodes.find((candidate) => candidate === node)?.y ?? node.y);
+	const name = useNetworkStore((state) => state.nodes.find((candidate) => candidate === node)?.name ?? node.name);
+	const color = useNetworkStore((state) => state.nodes.find((candidate) => candidate === node)?.metadata.color ?? node.metadata.color);
+	const isStart = useNetworkStore((state) => state.nodes.find((candidate) => candidate === node)?.is_start ?? node.is_start);
+	const isEnd = useNetworkStore((state) => state.nodes.find((candidate) => candidate === node)?.is_end ?? node.is_end);
+	const currentTool = useEditorStore((s) => s.currentTool);
+	const currentSelectedElement = useEditorStore((s) => s.currentSelectedElement);
+	const setCurrentSelectedElement = useEditorStore((s) => s.setCurrentSelectedElement);
+	const textRef = useRef<Konva.Text>(null);
+	const [isHovered, setIsHovered] = useState(false);
+	const pendingConnectionFrom = useEditorStore((s) => s.pendingConnectionFrom);
+
+	const setCurrentCursorType = useEditorStore((s) => s.setCurrentCursorType);
+	const resetCursorType = useEditorStore((s) => s.resetCursorType);
+	const readOnly = useEditorStore((s) => s.readOnly);
+
+	const handleDragMove = (e: Konva.KonvaEventObject<DragEvent>) => {
+		if (readOnly)
+			return;
+
+		const element = e.target;
+		if (currentTool !== 'select')
+		{
+			element.position({ x: node.x, y: node.y });
+			return;
+		}
+
+		const x = Math.round(element.x());
+		const y = Math.round(element.y());
+		element.position({ x, y });
+
+		if (x === node.x && y === node.y)
+			return;
+		for (const otherNode of useNetworkStore.getState().nodes) {
+			if (otherNode !== node && otherNode.x === x && otherNode.y === y) {
+				element.position({x: node.x, y: node.y});
+				return;
+			}
+		}
+		useNetworkStore.getState().moveNode(node, x, y);
+	};
+
+	const handleClick = () => {
+		if (readOnly)
+			return;
+
+		if (currentTool === 'select' || currentTool === 'node') {
+			setCurrentSelectedElement(node);
+			return;
+		}
+
+		if (currentTool === 'connection' && !readOnly) {
+			const pending = useEditorStore.getState().pendingConnectionFrom;
+			const setPending = useEditorStore.getState().setPendingConnectionFrom;
+
+			if (!pending) {
+				setPending(node);
+				return;
+			}
+
+			if (pending === node) {
+				setPending(null);
+				return;
+			}
+
+			if (pending && pending !== node) {
+				const newConn = new Connection(`${pending.name}-${node.name}`, pending, node, new ConnectionMetadata());
+				const exists = useNetworkStore.getState().connections.some((c) => c.equals(newConn));
+				if (!exists) {
+					useNetworkStore.getState().addConnection(newConn);
+					setCurrentSelectedElement(newConn);
+				}
+				setPending(null);
+				return;
+			}
+		}
+	};
+
+	useEffect(() => {
+		if (currentSelectedElement !== node)
+			setIsHovered(false);
+	}, [currentSelectedElement]);
+
+	return (
+		<>
+			<Circle
+				key={`${node.name}-circle`}
+				x={x} y={y}
+				radius={0.16}
+				fill={color}
+				stroke={pendingConnectionFrom === node ? '#f59e0b' : isStart ? '#ffffff' : isEnd ? '#ffffff' : undefined}
+				strokeWidth={0.02}
+				scaleX={isHovered ? 1.1 : 1}
+				scaleY={isHovered ? 1.1 : 1}
+				draggable={!readOnly && currentTool === 'select'}
+				shadowColor='rgba(0,0,0,0.15)'
+				shadowBlur={10}
+				shadowOffsetY={4}
+				onDragMove={handleDragMove}
+				onClick={handleClick}
+				onMouseEnter={() => {
+					setCurrentCursorType('hover_node');
+					setIsHovered(true);
+				}}
+				onMouseLeave={() => {
+					resetCursorType();
+					if (currentSelectedElement !== node) setIsHovered(false);
+				}}
+				onDragStart={() => {
+					if (readOnly)
+						return;
+
+					setCurrentCursorType('drag_node');
+				}}
+				onDragEnd={() => {
+					if (readOnly)
+						return;
+
+					resetCursorType();
+				}}
+			/>
+			<Text
+				ref={textRef}
+				key={`${node.name}-text`}
+				x={x - 1} y={y + 0.27}
+				width={2}
+				text={name}
+				fontSize={0.15}
+				fontFamily={'Arial'}
+				fill={'#fff'}
+				align={'center'}
+			/>
+		</>
+	)
+}
+
+
+export { Node };

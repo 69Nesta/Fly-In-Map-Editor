@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Flyin Editor is a web-based code editor designed for quick and easy editing of files on the go. It provides a simple and intuitive interface for editing code directly from your browser, making it ideal for developers who need to make quick changes to their projects without the need for a full-fledged IDE." />
+    <meta name="keywords" content="flyin editor, fly-in editor, fly-in, fly-in map editor, forty two projects map editor, 42 fly in map editor, fly in, fly-in editor, fly in editor, 42 fly-in, 42 fly in" />
+    <meta name="author" content="Nestor" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Flyin Editor" />
+    <link rel="icon" type="image/x-icon" href="/favicon.svg">
+    <title inertia>
+      Flyin Editor
+    </title>
+
+    @viteReactRefresh()
+    @vite(['inertia/app.tsx'])
+    @inertiaHead()
+    @stack('dumper')
+  </head>
+
+  <body class="dark">
+    @inertia()
+  </body>
+
+</html>
